@@ -1,10 +1,9 @@
 use std::collections::LinkedList;
 use std::fs::File;
-use std::io::Write;
+use std::io::{Write, Error};
+use super::def_constants::*;
 use super::item::*;
 
-const DEF_PACKAGE: &str = r"\usepackage";
-const DEF_DOCUMENT_CLASS: &str = r"\documentclass";
 
 pub struct Document
 {
@@ -16,18 +15,30 @@ pub struct Document
 
 impl Document
 {
+    pub fn new(doc_file: File, doc_class: DocumentClass) -> Self
+    {
+        Self
+        {
+            file: doc_file,
+            class: doc_class,
+            packages: Vec::new(),
+            items: Vec::new()
+        }
+    }
+
     pub fn add<I: Item + 'static>(&mut self, item: I)
     {
         self.items.push(Box::new(item)); // Box::new() adds it to the heap
     }
 
-    pub fn build(&mut self)
+    pub fn build(&mut self) -> Result<(), Error>
     {
-        self.build_doc_class();
-        self.build_packages();
+        self.build_doc_class()?;
+        self.build_packages()?;
+        Ok(())
     }
 
-    fn build_doc_class(&mut self)
+    fn build_doc_class(&mut self) -> Result<(), Error>
     {
         let mut doc_class_str: String = format!("{}[", DEF_DOCUMENT_CLASS);
 
@@ -37,23 +48,17 @@ impl Document
         }
 
         doc_class_str = format!("{}]{}", doc_class_str, into_braces(&self.class.name));
-        writeln!(self.file, "{}", doc_class_str);
+        writeln!(self.file, "{}", doc_class_str)
     }
 
-    fn build_packages(&self)
+    fn build_packages(&self) -> Result<(), Error>
     {
         for package in &self.packages
         {
-            let mut package_str: String = format!("{}[", DEF_PACKAGE);
-
-            for option in &package.options
-            {
-                package_str = format!("{}{},", package_str, option);
-            }
-
-            package_str = format!("{}]{}", package_str, into_braces(&package.name));
-            writeln!(&self.file, "{}", package_str);
+            package.build(&self)?;
         }
+
+        Ok(())
     }
 }
 
@@ -73,7 +78,7 @@ impl DocumentClass
 
 pub fn into_braces(string: &String) -> String
 {
-    let str_with_braces: &str = "{";
-    format!("{}{}", str_with_braces, string);
+    let mut str_with_braces: String = String::from("{");
+    str_with_braces = format!("{}{}", str_with_braces, string);
     format!("{}{}", str_with_braces, "}")
 }
