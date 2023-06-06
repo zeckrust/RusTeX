@@ -4,20 +4,15 @@ use super::def_constants::*;
 use super::document::*;
 
 
-pub trait Item
-{
-    fn build(&self, doc: &Document) -> Result<(), Error>;
-}
-
 pub struct Package
 {
     pub name: String,
     pub options: LinkedList<String>
 }
 
-impl Item for Package
+impl Package
 {
-    fn build(&self, doc: &Document) -> Result<(), Error>
+    pub fn build(&self, doc: &Document) -> Result<(), Error>
     {
         let mut package_str: String = format!("{}[", DEF_PACKAGE);
 
@@ -31,25 +26,40 @@ impl Item for Package
     }
 }
 
-pub struct Table
+pub trait Item
 {
-
-}
-
-pub struct Figure
-{
-
-}
-
-pub struct Enumerate
-{
-
+    fn build(&self, doc: &Document) -> Result<(), Error>;
 }
 
 pub struct Paragraph
 {
-
+    pub text: String
 }
+
+impl Item for Paragraph
+{
+    fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        let mut formatted_text = self.text.replace("  ", "");
+        formatted_text = format!("{}{}", DEF_TEXT, into_braces(&formatted_text));
+        writeln!(&doc.file, "{}", formatted_text)
+    }
+}
+
+// pub struct Table
+// {
+//     //@TODO: Implement as Item
+// }
+
+// pub struct Figure
+// {
+//     //@TODO: Implement as Item
+// }
+
+// pub struct Enumerate
+// {
+//     //@TODO: Implement as Item
+// }
 
 pub struct Section
 {

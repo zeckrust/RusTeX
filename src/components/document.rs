@@ -26,16 +26,21 @@ impl Document
         }
     }
 
-    pub fn add<I: Item + 'static>(&mut self, item: I)
+    pub fn add_item<I: Item + 'static>(&mut self, item: I)
     {
         self.items.push(Box::new(item)); // Box::new() adds it to the heap
+    }
+
+    pub fn add_packages(&mut self, _packages: Vec<Package>)
+    {
+        self.packages.extend(_packages)
     }
 
     pub fn build(&mut self) -> Result<(), Error>
     {
         self.build_doc_class()?;
         self.build_packages()?;
-        Ok(())
+        self.build_items()
     }
 
     fn build_doc_class(&mut self) -> Result<(), Error>
@@ -48,17 +53,36 @@ impl Document
         }
 
         doc_class_str = format!("{}]{}", doc_class_str, into_braces(&self.class.name));
-        writeln!(self.file, "{}", doc_class_str)
+        writeln!(self.file, "{}", doc_class_str)?;
+        self.add_blank_line()
     }
 
-    fn build_packages(&self) -> Result<(), Error>
+    fn build_packages(&mut self) -> Result<(), Error>
     {
         for package in &self.packages
         {
             package.build(&self)?;
         }
 
-        Ok(())
+        self.add_blank_line()
+    }
+
+    fn build_items(&mut self) -> Result<(), Error>
+    {
+        writeln!(&self.file, "{}\n", DEF_BEGIN_DOCUMENT)?;
+
+        for item in &self.items
+        {
+            item.build(&self)?;
+            self.add_blank_line()?;
+        }
+
+        writeln!(&self.file, "{}", DEF_END_DOCUMENT)
+    }
+
+    fn add_blank_line(&self) -> Result<(), Error>
+    {
+        writeln!(&self.file, "")
     }
 }
 
