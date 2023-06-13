@@ -30,19 +30,38 @@ fn main() -> std::io::Result<()>
         {
             name: String::from("geometry"),
             options: LinkedList::from([String::from("margin=2.5cm")])
+        },
+        Package
+        {
+            name: String::from("fontenc"),
+            options: LinkedList::from([String::from("T1")])
         }
     ]);
 
     doc.add_packages(packages);
 
+    let mut section_1: Section = Section::new(
+        String::from("Section"),
+        true
+    );
+
     let paragraph_1 = Paragraph
     {
         text: String::from(
             "This is a paragraphe test. Lets see if
-             writing on many lines still works.
-             It seems like it is working!")
+            writing on many lines still works.
+            It seems like it is working!")
     };
-    doc.add_item(paragraph_1);
+
+    let sub_section_1: SubSection = SubSection::new(
+        String::from("SubSection"),
+        false
+    );
+
+    section_1.add_item(paragraph_1);
+    section_1.add_item(sub_section_1);
+
+    doc.add_item(section_1);
 
     doc.build()
 }

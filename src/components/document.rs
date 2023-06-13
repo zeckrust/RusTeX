@@ -80,7 +80,7 @@ impl Document
         writeln!(&self.file, "{}", DEF_END_DOCUMENT)
     }
 
-    fn add_blank_line(&self) -> Result<(), Error>
+    pub fn add_blank_line(&self) -> Result<(), Error>
     {
         writeln!(&self.file, "")
     }

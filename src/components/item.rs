@@ -41,7 +41,7 @@ impl Item for Paragraph
     fn build(&self, doc: &Document) -> Result<(), Error>
     {
         let mut formatted_text = self.text.replace("  ", "");
-        formatted_text = format!("{}{}", DEF_TEXT, into_braces(&formatted_text));
+        formatted_text = formatted_text.replace("\n", " ");
         writeln!(&doc.file, "{}", formatted_text)
     }
 }
@@ -61,20 +61,127 @@ impl Item for Paragraph
 //     //@TODO: Implement as Item
 // }
 
+// pub struct Equation
+// {
+//     //@TODO: Implement as Item
+// }
+
 pub struct Section
 {
     name: String,
-    display_num: bool
+    display_num: bool,
+    items: Vec<Box<dyn Item>>
+}
+
+impl Section
+{
+    pub fn new(_name: String, _display_num: bool) -> Self
+    {
+        Self {name: _name, display_num: _display_num, items: Vec::new()}
+    }
+
+    pub fn add_item<I: Item + 'static>(&mut self, item: I)
+    {
+        self.items.push(Box::new(item));
+    }
+}
+
+impl Item for Section
+{
+    fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        match self.display_num
+        {
+            true => writeln!(&doc.file, "{}*{}\n", DEF_SECTION, into_braces(&self.name))?,
+            false => writeln!(&doc.file, "{}{}\n", DEF_SECTION, into_braces(&self.name))?
+        }
+
+        for item in &self.items
+        {
+            item.build(doc)?;
+            doc.add_blank_line()?;
+        }
+
+        Ok(())
+    }
 }
 
 pub struct SubSection
 {
     name: String,
-    display_num: bool
+    display_num: bool,
+    items: Vec<Box<dyn Item>>
+}
+
+impl SubSection
+{
+    pub fn new(_name: String, _display_num: bool) -> Self
+    {
+        Self {name: _name, display_num: _display_num, items: Vec::new()}
+    }
+
+    pub fn add_item<I: Item + 'static>(&mut self, item: I)
+    {
+        self.items.push(Box::new(item));
+    }
+}
+
+impl Item for SubSection
+{
+    fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        match self.display_num
+        {
+            true => writeln!(&doc.file, "{}*{}\n", DEF_SUB_SECTION, into_braces(&self.name))?,
+            false => writeln!(&doc.file, "{}{}\n", DEF_SUB_SECTION, into_braces(&self.name))?
+        }
+
+        for item in &self.items
+        {
+            item.build(doc)?;
+            doc.add_blank_line()?;
+        }
+
+        Ok(())
+    }
 }
 
 pub struct SubSubSection
 {
     name: String,
-    display_num: bool
+    display_num: bool,
+    items: Vec<Box<dyn Item>>
+}
+
+impl SubSubSection
+{
+    pub fn new(_name: String, _display_num: bool) -> Self
+    {
+        Self {name: _name, display_num: _display_num, items: Vec::new()}
+    }
+
+    pub fn add_item<I: Item + 'static>(&mut self, item: I)
+    {
+        self.items.push(Box::new(item));
+    }
+}
+
+impl Item for SubSubSection
+{
+    fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        match self.display_num
+        {
+            true => writeln!(&doc.file, "{}*{}\n", DEF_SUB_SUB_SECTION, into_braces(&self.name))?,
+            false => writeln!(&doc.file, "{}{}\n", DEF_SUB_SUB_SECTION, into_braces(&self.name))?
+        }
+
+        for item in &self.items
+        {
+            item.build(doc)?;
+            doc.add_blank_line()?;
+        }
+
+        Ok(())
+    }
 }
