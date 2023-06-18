@@ -45,34 +45,31 @@ fn main() -> std::io::Result<()>
         true
     );
 
-    let paragraph_1 = Paragraph
-    {
-        text: String::from(
+    let paragraph_1 = Paragraph::new(
+        String::from(
             "This is a paragraph test. Lets see if
             writing on many lines still works.
             It seems like it is working!")
-    };
+        );
 
     let mut sub_section_1: SubSection = SubSection::new(
         String::from("SubSection"),
         false
     );
 
-    let paragraph_2 = Paragraph
-    {
-        text: String::from(
+    let paragraph_2 = Paragraph::new(
+        String::from(
             "This is a paragraph. I can write anything.
             BLABALABLABALABALABALABALABALABALABALABA
             ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa. Nice!")
-    };
+        );
 
-    let paragraph_3 = Paragraph
-    {
-        text: String::from(
+    let paragraph_3 = Paragraph::new(
+        String::from(
             "This is another paragraph. I can also write anything.
             BLABALABLABALABALABALABALABALABALABALABA
             ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa.")
-    };
+        );
 
     let mut block_1: Block = Block::new();
     block_1.add_item(paragraph_2);

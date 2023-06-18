@@ -41,6 +41,7 @@ impl Document
     {
         self.build_doc_class()?;
         self.build_packages()?;
+        self.update_indents();
         self.build_items()
     }
 
@@ -66,6 +67,14 @@ impl Document
         }
 
         self.add_blank_line()
+    }
+
+    fn update_indents(&mut self)
+    {
+        for item in &mut self.items
+        {
+            item.update_indent(&0);
+        }
     }
 
     fn build_items(&mut self) -> Result<(), Error>
