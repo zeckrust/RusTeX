@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::{Write, Error};
 use super::def_constants::*;
 use super::item::*;
+use super::utilities::*;
 
 
 pub struct Document
@@ -74,7 +75,6 @@ impl Document
         for item in &self.items
         {
             item.build(&self)?;
-            self.add_blank_line()?;
         }
 
         writeln!(&self.file, "{}", DEF_END_DOCUMENT)
@@ -100,9 +100,24 @@ impl DocumentClass
     }
 }
 
-pub fn into_braces(string: &String) -> String
+pub struct Package
 {
-    let mut str_with_braces: String = String::from("{");
-    str_with_braces = format!("{}{}", str_with_braces, string);
-    format!("{}{}", str_with_braces, "}")
+    pub name: String,
+    pub options: LinkedList<String>
+}
+
+impl Package
+{
+    pub fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        let mut package_str: String = format!("{}[", DEF_PACKAGE);
+
+        for option in &self.options
+        {
+            package_str = format!("{}{},", package_str, option);
+        }
+
+        package_str = format!("{}]{}", package_str, into_braces(&self.name));
+        writeln!(&doc.file, "{}", package_str)
+    }
 }

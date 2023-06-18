@@ -48,15 +48,40 @@ fn main() -> std::io::Result<()>
     let paragraph_1 = Paragraph
     {
         text: String::from(
-            "This is a paragraphe test. Lets see if
+            "This is a paragraph test. Lets see if
             writing on many lines still works.
             It seems like it is working!")
     };
 
-    let sub_section_1: SubSection = SubSection::new(
+    let mut sub_section_1: SubSection = SubSection::new(
         String::from("SubSection"),
         false
     );
+
+    let paragraph_2 = Paragraph
+    {
+        text: String::from(
+            "This is a paragraph. I can write anything.
+            BLABALABLABALABALABALABALABALABALABALABA
+            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa. Nice!")
+    };
+
+    let paragraph_3 = Paragraph
+    {
+        text: String::from(
+            "This is another paragraph. I can also write anything.
+            BLABALABLABALABALABALABALABALABALABALABA
+            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa.")
+    };
+
+    let mut block_1: Block = Block::new();
+    block_1.add_item(paragraph_2);
+    block_1.add_item(paragraph_3);
+
+    let mut enumerate_1: Enumerate = Enumerate::new();
+    enumerate_1.add_item(block_1);
+
+    sub_section_1.add_item(enumerate_1);
 
     section_1.add_item(paragraph_1);
     section_1.add_item(sub_section_1);

@@ -1,30 +1,8 @@
-use std::collections::LinkedList;
 use std::io::{Write, Error};
 use super::def_constants::*;
 use super::document::*;
+use super::utilities::*;
 
-
-pub struct Package
-{
-    pub name: String,
-    pub options: LinkedList<String>
-}
-
-impl Package
-{
-    pub fn build(&self, doc: &Document) -> Result<(), Error>
-    {
-        let mut package_str: String = format!("{}[", DEF_PACKAGE);
-
-        for option in &self.options
-        {
-            package_str = format!("{}{},", package_str, option);
-        }
-
-        package_str = format!("{}]{}", package_str, into_braces(&self.name));
-        writeln!(&doc.file, "{}", package_str)
-    }
-}
 
 pub trait Item
 {
@@ -42,7 +20,8 @@ impl Item for Paragraph
     {
         let mut formatted_text = self.text.replace("  ", "");
         formatted_text = formatted_text.replace("\n", " ");
-        writeln!(&doc.file, "{}", formatted_text)
+        writeln!(&doc.file, "{}", formatted_text)?;
+        doc.add_blank_line()
     }
 }
 
@@ -56,15 +35,77 @@ impl Item for Paragraph
 //     //@TODO: Implement as Item
 // }
 
-// pub struct Enumerate
-// {
-//     //@TODO: Implement as Item
-// }
-
 // pub struct Equation
 // {
 //     //@TODO: Implement as Item
 // }
+
+pub struct Enumerate
+{
+    items: Vec<Box<dyn Item>>
+}
+
+impl Enumerate
+{
+    pub fn new() -> Self
+    {
+        Self {items: Vec::new()}
+    }
+
+    pub fn add_item<I: Item + 'static>(&mut self, item: I)
+    {
+        self.items.push(Box::new(item));
+    }
+}
+
+impl Item for Enumerate
+{
+    fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        writeln!(&doc.file, "{}", DEF_BEGIN_ENUMERATE)?;
+        doc.add_blank_line()?;
+
+        for item in &self.items
+        {
+            writeln!(&doc.file, "{}", DEF_ITEM_ENUMERATE)?;
+            item.build(doc)?;
+        }
+
+        writeln!(&doc.file, "{}", DEF_END_ENUMERATE)?;
+        doc.add_blank_line()
+    }
+}
+
+pub struct Block
+{
+    items: Vec<Box<dyn Item>>
+}
+
+impl Block
+{
+    pub fn new() -> Self
+    {
+        Self {items: Vec::new()}
+    }
+
+    pub fn add_item<I: Item + 'static>(&mut self, item: I)
+    {
+        self.items.push(Box::new(item));
+    }
+}
+
+impl Item for Block
+{
+    fn build(&self, doc: &Document) -> Result<(), Error>
+    {
+        for item in &self.items
+        {
+            item.build(doc)?;
+        }
+
+        Ok(())
+    }
+}
 
 pub struct Section
 {
@@ -99,7 +140,6 @@ impl Item for Section
         for item in &self.items
         {
             item.build(doc)?;
-            doc.add_blank_line()?;
         }
 
         Ok(())
@@ -139,7 +179,6 @@ impl Item for SubSection
         for item in &self.items
         {
             item.build(doc)?;
-            doc.add_blank_line()?;
         }
 
         Ok(())
@@ -179,7 +218,6 @@ impl Item for SubSubSection
         for item in &self.items
         {
             item.build(doc)?;
-            doc.add_blank_line()?;
         }
 
         Ok(())
