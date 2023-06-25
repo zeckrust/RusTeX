@@ -2,6 +2,7 @@ mod components;
 
 use components::document::*;
 use components::item::*;
+use components::container::*;
 use std::{fs::File, collections::LinkedList};
 
 const DOCUMENT_NAME: &str = "tex_files/main.tex";
