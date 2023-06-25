@@ -38,7 +38,7 @@ impl Item for Enumerate
 
         for item in &self.items
         {
-            indent_line(&doc, &self.indent)?;
+            indent_line(&doc, &(self.indent + 1))?;
             writeln!(&doc.file, "{}", DEF_ITEM_ENUMERATE)?;
             item.build(doc)?;
         }
