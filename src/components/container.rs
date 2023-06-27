@@ -112,9 +112,30 @@ impl Item for Block
     }
 }
 
+pub enum SectionType
+{
+    Section,
+    SubSection,
+    SubSubSection
+}
+
+impl SectionType
+{
+    pub fn get_def(&self) -> &str
+    {
+        match self
+        {
+            SectionType::Section => DEF_SECTION,
+            SectionType::SubSection => DEF_SUB_SECTION,
+            SectionType::SubSubSection => DEF_SUB_SUB_SECTION
+        }
+    }
+}
+
 pub struct Section
 {
     name: String,
+    sec_type: SectionType,
     display_num: bool,
     items: Vec<Box<dyn Item>>,
     pub indent: usize
@@ -122,9 +143,16 @@ pub struct Section
 
 impl Section
 {
-    pub fn new(_name: String, _display_num: bool) -> Self
+    pub fn new(_name: String, _sec_type: SectionType, _display_num: bool) -> Self
     {
-        Self {name: _name, display_num: _display_num, items: Vec::new(), indent: 0}
+        Self
+        {
+            name: _name,
+            sec_type: _sec_type,
+            display_num: _display_num,
+            items: Vec::new(),
+            indent: 0
+        }
     }
 
     pub fn add_item<I: Item + 'static>(&mut self, item: I)
@@ -148,118 +176,8 @@ impl Item for Section
         indent_line(&doc, &self.indent)?;
         match self.display_num
         {
-            true => writeln!(&doc.file, "{}*{}\n", DEF_SECTION, into_braces(&self.name))?,
-            false => writeln!(&doc.file, "{}{}\n", DEF_SECTION, into_braces(&self.name))?
-        }
-
-        for item in &self.items
-        {
-            item.build(doc)?;
-        }
-
-        Ok(())
-    }
-
-    fn update_indent(&mut self, super_indent: &usize)
-    {
-        self.indent = super_indent + 1;
-        self.update_nested_indent();
-    }
-}
-
-pub struct SubSection
-{
-    name: String,
-    display_num: bool,
-    items: Vec<Box<dyn Item>>,
-    pub indent: usize
-}
-
-impl SubSection
-{
-    pub fn new(_name: String, _display_num: bool) -> Self
-    {
-        Self {name: _name, display_num: _display_num, items: Vec::new(), indent: 0}
-    }
-
-    pub fn add_item<I: Item + 'static>(&mut self, item: I)
-    {
-        self.items.push(Box::new(item));
-    }
-
-    fn update_nested_indent(&mut self)
-    {
-        for item in &mut self.items
-        {
-            item.update_indent(&self.indent);
-        }
-    }
-}
-
-impl Item for SubSection
-{
-    fn build(&self, doc: &Document) -> Result<(), Error>
-    {
-        indent_line(&doc, &self.indent)?;
-        match self.display_num
-        {
-            true => writeln!(&doc.file, "{}*{}\n", DEF_SUB_SECTION, into_braces(&self.name))?,
-            false => writeln!(&doc.file, "{}{}\n", DEF_SUB_SECTION, into_braces(&self.name))?
-        }
-
-        for item in &self.items
-        {
-            item.build(doc)?;
-        }
-
-        Ok(())
-    }
-
-    fn update_indent(&mut self, super_indent: &usize)
-    {
-        self.indent = super_indent + 1;
-        self.update_nested_indent();
-    }
-}
-
-pub struct SubSubSection
-{
-    name: String,
-    display_num: bool,
-    items: Vec<Box<dyn Item>>,
-    pub indent: usize
-}
-
-impl SubSubSection
-{
-    pub fn new(_name: String, _display_num: bool) -> Self
-    {
-        Self {name: _name, display_num: _display_num, items: Vec::new(), indent: 0}
-    }
-
-    pub fn add_item<I: Item + 'static>(&mut self, item: I)
-    {
-        self.items.push(Box::new(item));
-    }
-
-    fn update_nested_indent(&mut self)
-    {
-        for item in &mut self.items
-        {
-            item.update_indent(&self.indent);
-        }
-    }
-}
-
-impl Item for SubSubSection
-{
-    fn build(&self, doc: &Document) -> Result<(), Error>
-    {
-        indent_line(&doc, &self.indent)?;
-        match self.display_num
-        {
-            true => writeln!(&doc.file, "{}*{}\n", DEF_SUB_SUB_SECTION, into_braces(&self.name))?,
-            false => writeln!(&doc.file, "{}{}\n", DEF_SUB_SUB_SECTION, into_braces(&self.name))?
+            true => writeln!(&doc.file, "{}*{}\n", self.sec_type.get_def(), into_braces(&self.name))?,
+            false => writeln!(&doc.file, "{}{}\n", self.sec_type.get_def(), into_braces(&self.name))?
         }
 
         for item in &self.items

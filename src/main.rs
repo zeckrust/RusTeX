@@ -43,6 +43,7 @@ fn main() -> std::io::Result<()>
 
     let mut section_1: Section = Section::new(
         String::from("Section"),
+        SectionType::Section,
         true
     );
 
@@ -53,8 +54,9 @@ fn main() -> std::io::Result<()>
             It seems like it is working!")
         );
 
-    let mut sub_section_1: SubSection = SubSection::new(
+    let mut sub_section_1: Section = Section::new(
         String::from("SubSection"),
+        SectionType::SubSection,
         false
     );
 
