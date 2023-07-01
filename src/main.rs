@@ -1,4 +1,5 @@
 mod components;
+mod utilities;
 
 use components::document::*;
 use components::item::*;

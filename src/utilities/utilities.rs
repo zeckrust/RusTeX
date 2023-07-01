@@ -1,5 +1,5 @@
 use super::def_constants::*;
-use super::document::*;
+use crate::components::document::*;
 use std::io::{Write, Error};
 
 pub fn into_braces(string: &String) -> String

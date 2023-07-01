@@ -1,6 +1,6 @@
 use std::io::{Write, Error};
 use super::document::*;
-use super::utilities::*;
+use crate::utilities::utilities::*;
 
 
 pub trait Item

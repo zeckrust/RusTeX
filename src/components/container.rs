@@ -1,8 +1,8 @@
 use std::io::{Write, Error};
-use super::def_constants::*;
 use super::item::*;
-use super::utilities::*;
 use super::document::*;
+use crate::utilities::def_constants::*;
+use crate::utilities::utilities::*;
 
 pub trait Container: Item
 {
