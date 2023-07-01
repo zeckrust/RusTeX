@@ -1,9 +1,9 @@
 use std::collections::LinkedList;
 use std::fs::File;
 use std::io::{Write, Error};
-use super::def_constants::*;
 use super::item::*;
-use super::utilities::*;
+use crate::utilities::def_constants::*;
+use crate::utilities::utilities::*;
 
 
 pub struct Document
