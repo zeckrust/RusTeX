@@ -29,8 +29,7 @@ impl Item for Paragraph
     {
         let mut formatted_text = self.text.replace("  ", "");
         formatted_text = formatted_text.replace("\n", " ");
-        indent_line(&doc, &self.indent)?;
-        writeln!(&doc.file, "{}", formatted_text)?;
+        write_indented_line(&doc, &self.indent, formatted_text.as_str())?;
         doc.add_blank_line()
     }
 

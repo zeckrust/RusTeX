@@ -32,19 +32,16 @@ impl Item for Enumerate
 {
     fn build(&self, doc: &Document) -> Result<(), Error>
     {
-        indent_line(&doc, &self.indent)?;
-        writeln!(&doc.file, "{}", DEF_BEGIN_ENUMERATE)?;
+        write_indented_line(&doc, &self.indent, DEF_BEGIN_ENUMERATE)?;
         doc.add_blank_line()?;
 
         for item in &self.items
         {
-            indent_line(&doc, &(self.indent + 1))?;
-            writeln!(&doc.file, "{}", DEF_ITEM_ENUMERATE)?;
+            write_indented_line(&doc, &(self.indent + 1), DEF_ITEM_ENUMERATE)?;
             item.build(doc)?;
         }
 
-        indent_line(&doc, &self.indent)?;
-        writeln!(&doc.file, "{}", DEF_END_ENUMERATE)?;
+        write_indented_line(&doc, &self.indent, DEF_END_ENUMERATE)?;
         doc.add_blank_line()
     }
 

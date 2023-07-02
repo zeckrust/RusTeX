@@ -19,3 +19,9 @@ pub fn indent_line(doc: &Document, num_tabs: &usize) -> Result<(), Error>
     let tabs_str: String = "\t".repeat(*num_tabs);
     write!(&doc.file, "{}", tabs_str)
 }
+
+pub fn write_indented_line(doc: &Document, num_tabs: &usize, text: &str) -> Result<(), Error>
+{
+    indent_line(&doc, num_tabs)?;
+    writeln!(&doc.file, "{}", text)
+}
