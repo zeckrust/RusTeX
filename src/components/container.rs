@@ -12,7 +12,7 @@ pub trait Container: Item
 pub struct Enumerate
 {
     items: Vec<Box<dyn Item>>,
-    pub indent: usize
+    indent: usize
 }
 
 impl Enumerate
@@ -66,7 +66,7 @@ impl Container for Enumerate
 pub struct Block
 {
     items: Vec<Box<dyn Item>>,
-    pub indent: usize
+    indent: usize
 }
 
 impl Block
@@ -135,7 +135,7 @@ pub struct Section
     sec_type: SectionType,
     display_num: bool,
     items: Vec<Box<dyn Item>>,
-    pub indent: usize
+    indent: usize
 }
 
 impl Section

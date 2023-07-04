@@ -50,9 +50,9 @@ fn main() -> std::io::Result<()>
 
     let paragraph_1 = Paragraph::new(
         String::from(
-            "This is a paragraph test. Lets see if
-            writing on many lines still works.
-            It seems like it is working!")
+            "This is a **paragraph** test. Lets **see** if
+            writing on many _lines_ still works.
+            It _seems_ like it is working!")
         );
 
     let mut sub_section_1: Section = Section::new(

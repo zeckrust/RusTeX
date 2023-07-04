@@ -42,7 +42,8 @@ impl Document
         self.build_doc_class()?;
         self.build_packages()?;
         self.update_indents();
-        self.build_items()
+        self.build_items()?;
+        Ok(())
     }
 
     fn build_doc_class(&mut self) -> Result<(), Error>

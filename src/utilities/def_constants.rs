@@ -14,3 +14,4 @@ pub const DEF_SUB_SECTION: &str = r"\subsection";
 pub const DEF_SUB_SUB_SECTION: &str = r"\subsubsection";
 
 pub const DEF_BOLD: &str = r"\textbf";
+pub const DEF_ITALIC: &str = r"\textit";

@@ -1,4 +1,4 @@
-use std::io::{Write, Error};
+use std::io::{Error};
 use super::document::*;
 use crate::utilities::utilities::*;
 
@@ -11,15 +11,15 @@ pub trait Item
 
 pub struct Paragraph
 {
-    pub text: String,
-    pub indent: usize
+    text: String,
+    indent: usize
 }
 
 impl Paragraph
 {
     pub fn new(_text: String) -> Self
     {
-        Self {text: _text, indent: 0}
+        Self {text: handle_text_format(_text), indent: 0}
     }
 }
 
