@@ -30,6 +30,21 @@ pub fn write_indented_line(doc: &Document, num_tabs: &usize, text: &str) -> Resu
 const BOLD_REGEX: &str = r"\*{2}(?P<text>.+?)\*{2}";
 const ITALIC_REGEX: &str= r"_(?P<text>.+?)_";
 
+enum FormatType {
+    Bold,
+    Italic
+}
+
+impl FormatType{
+
+    fn handle_formatting(&self, text: &String) -> String {
+        match self {
+            FormatType::Bold => into_bold(text),
+            FormatType::Italic => into_italic(text)
+        }
+    }
+}
+
 pub fn handle_text_format(text: String) -> String {
     let formatted_text = handle_bold(text);
     handle_italic(formatted_text)
@@ -39,7 +54,7 @@ fn handle_bold(text: String) -> String {
     let bold_regex = Regex::new(BOLD_REGEX);
 
     match bold_regex {
-        Ok(regex) => replace_bold_matches(text, regex),
+        Ok(regex) => replace_matches(text, regex, FormatType::Bold),
 
         Err(error) => {
             println!("Bold Regex error: {}", error);
@@ -48,24 +63,11 @@ fn handle_bold(text: String) -> String {
     }
 }
 
-fn replace_bold_matches(text: String, regex: Regex) -> String{
-    let captures = regex.captures_iter(&text);
-    let mut new_text = text.clone();
-
-    for capture in captures {
-        new_text = regex
-            .replace(&new_text, into_bold(&capture["text"].to_string()))
-            .into_owned();
-    }
-
-    new_text
-}
-
 fn handle_italic(text: String) -> String {
     let italic_regex = Regex::new(ITALIC_REGEX);
 
     match italic_regex {
-        Ok(regex) => replace_italic_matches(text, regex),
+        Ok(regex) => replace_matches(text, regex, FormatType::Italic),
 
         Err(error) => {
             println!("Italic Regex error: {}", error);
@@ -74,13 +76,13 @@ fn handle_italic(text: String) -> String {
     }
 }
 
-fn replace_italic_matches(text: String, regex: Regex) -> String {
+fn replace_matches(text: String, regex: Regex, format_type: FormatType) -> String{
     let captures = regex.captures_iter(&text);
     let mut new_text = text.clone();
 
     for capture in captures {
         new_text = regex
-            .replace(&new_text, into_italic(&capture["text"].to_string()))
+            .replace(&new_text, format_type.handle_formatting(&capture["text"].to_string()))
             .into_owned();
     }
 
