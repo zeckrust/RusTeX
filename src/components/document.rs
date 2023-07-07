@@ -52,10 +52,20 @@ impl Document {
     }
 
     fn build_packages(&mut self) -> Result<(), Error> {
+        self.build_default_packages()?;
+
+        writeln!(&self.file, "{}", USER_PACKAGES_COMMENT)?;
         for package in &self.packages {
             package.build(&self)?;
         }
 
+        self.add_blank_line()
+    }
+
+    fn build_default_packages(&mut self) -> Result<(), Error> {
+        writeln!(&self.file, "{}", DEFAULT_PACKAGES_COMMENT)?;
+        writeln!(&self.file, "{}", DEFAULT_FLOAT_PACKAGE)?;
+        writeln!(&self.file, "{}", DEFAULT_GRAPHICX_PACKAGE)?;
         self.add_blank_line()
     }
 
