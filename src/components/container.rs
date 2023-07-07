@@ -4,39 +4,31 @@ use super::document::*;
 use crate::utilities::def_constants::*;
 use crate::utilities::utilities::*;
 
-pub trait Container: Item
-{
+pub trait Container: Item {
     fn update_nested_indent(&mut self);
 }
 
-pub struct Enumerate
-{
+pub struct Enumerate {
     items: Vec<Box<dyn Item>>,
     indent: usize
 }
 
-impl Enumerate
-{
-    pub fn new() -> Self
-    {
+impl Enumerate {
+    pub fn new() -> Self {
         Self {items: Vec::new(), indent: 0}
     }
 
-    pub fn add_item<I: Item + 'static>(&mut self, item: I)
-    {
+    pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
 }
 
-impl Item for Enumerate
-{
-    fn build(&self, doc: &Document) -> Result<(), Error>
-    {
+impl Item for Enumerate {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
         write_indented_line(&doc, &self.indent, DEF_BEGIN_ENUMERATE)?;
         doc.add_blank_line()?;
 
-        for item in &self.items
-        {
+        for item in &self.items {
             write_indented_line(&doc, &(self.indent + 1), DEF_ITEM_ENUMERATE)?;
             item.build(doc)?;
         }
@@ -45,67 +37,56 @@ impl Item for Enumerate
         doc.add_blank_line()
     }
 
-    fn update_indent(&mut self, super_indent: &usize)
-    {
+    fn update_indent(&mut self, super_indent: &usize) {
         self.indent = super_indent + 1;
         self.update_nested_indent();
     }
 }
 
-impl Container for Enumerate
-{
-    fn update_nested_indent(&mut self)
-    {
-        for item in &mut self.items
-        {
+impl Container for Enumerate {
+    fn update_nested_indent(&mut self) {
+        for item in &mut self.items {
             item.update_indent(&self.indent);
         }
     }
 }
 
-pub struct Block
-{
+pub struct Block {
     items: Vec<Box<dyn Item>>,
     indent: usize
 }
 
-impl Block
-{
-    pub fn new() -> Self
-    {
+impl Block {
+    pub fn new() -> Self {
         Self {items: Vec::new(), indent: 0}
     }
 
-    pub fn add_item<I: Item + 'static>(&mut self, item: I)
-    {
+    pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
-    }
-
-    fn update_nested_indent(&mut self)
-    {
-        for item in &mut self.items
-        {
-            item.update_indent(&self.indent);
-        }
     }
 }
 
-impl Item for Block
-{
-    fn build(&self, doc: &Document) -> Result<(), Error>
-    {
-        for item in &self.items
-        {
+impl Item for Block {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        for item in &self.items {
             item.build(doc)?;
         }
 
         Ok(())
     }
 
-    fn update_indent(&mut self, super_indent: &usize)
-    {
+    fn update_indent(&mut self, super_indent: &usize) {
         self.indent = *super_indent;
         self.update_nested_indent();
+    }
+}
+
+impl Container for Block {
+
+    fn update_nested_indent(&mut self) {
+        for item in &mut self.items {
+            item.update_indent(&self.indent);
+        }
     }
 }
 
@@ -147,12 +128,6 @@ impl Section {
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
-
-    fn update_nested_indent(&mut self) {
-        for item in &mut self.items {
-            item.update_indent(&self.indent);
-        }
-    }
 }
 
 impl Item for Section {
@@ -173,5 +148,13 @@ impl Item for Section {
     fn update_indent(&mut self, super_indent: &usize) {
         self.indent = super_indent + 1;
         self.update_nested_indent();
+    }
+}
+
+impl Container for Section {
+    fn update_nested_indent(&mut self) {
+        for item in &mut self.items {
+            item.update_indent(&self.indent);
+        }
     }
 }
