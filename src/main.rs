@@ -7,34 +7,29 @@ use components::container::*;
 use std::{fs::File, collections::LinkedList};
 
 const DOCUMENT_NAME: &str = "tex_files/main.tex";
-const DOCUMENT_CLASS: &str = "article";
+const DOCUMENT_CLASS: ClassType = ClassType::Article;
 const FONT_SIZE: &str = "12pt";
 
-fn main() -> std::io::Result<()>
-{
+fn main() -> std::io::Result<()> {
     let doc_file: File = File::create(DOCUMENT_NAME)?;
 
     let doc_class: DocumentClass = DocumentClass::new(
-        DOCUMENT_CLASS.to_string(),
+        DOCUMENT_CLASS,
         LinkedList::from([FONT_SIZE.to_string()])
     );
 
     let mut doc: Document = Document::new(doc_file, doc_class);
 
-    let packages = Vec::<Package>::from(
-    [
-        Package
-        {
+    let packages = Vec::<Package>::from([
+        Package {
             name: String::from("babel"),
             options: LinkedList::from([String::from("french")])
         },
-        Package
-        {
+        Package {
             name: String::from("geometry"),
             options: LinkedList::from([String::from("margin=2.5cm")])
         },
-        Package
-        {
+        Package {
             name: String::from("fontenc"),
             options: LinkedList::from([String::from("T1")])
         }
@@ -52,8 +47,9 @@ fn main() -> std::io::Result<()>
         String::from(
             "This is a **paragraph** test. Lets **see** if
             writing on many _lines_ still works.
-            It _seems_ like it is working!")
-        );
+            It _seems_ like it is working!"
+        )
+    );
 
     let mut sub_section_1: Section = Section::new(
         String::from("SubSection"),
@@ -65,15 +61,17 @@ fn main() -> std::io::Result<()>
         String::from(
             "This is a paragraph. I can write anything.
             BLABALABLABALABALABALABALABALABALABALABA
-            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa. Nice!")
-        );
+            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa. Nice!"
+        )
+    );
 
     let paragraph_3 = Paragraph::new(
         String::from(
             "This is another paragraph. I can also write anything.
             BLABALABLABALABALABALABALABALABALABALABA
-            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa.")
-        );
+            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa."
+        )
+    );
 
     let mut block_1: Block = Block::new();
     block_1.add_item(paragraph_2);
