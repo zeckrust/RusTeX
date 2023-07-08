@@ -2,7 +2,7 @@ use std::io::{Write, Error};
 use super::item::*;
 use super::document::*;
 use crate::utilities::def_constants::*;
-use crate::utilities::utilities::*;
+use crate::utilities::format::*;
 
 pub trait Container: Item {
     fn update_nested_indent(&mut self);

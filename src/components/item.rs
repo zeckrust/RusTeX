@@ -1,6 +1,6 @@
 use std::io::{Error};
 use super::document::*;
-use crate::utilities::utilities::*;
+use crate::utilities::format::*;
 use crate::utilities::def_constants::*;
 
 
@@ -93,9 +93,5 @@ impl Item for Figure {
 }
 
 // pub struct Table {
-//     //@TODO: Implement as Item
-// }
-
-// pub struct Equation {
 //     //@TODO: Implement as Item
 // }
