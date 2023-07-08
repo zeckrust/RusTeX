@@ -4,8 +4,8 @@ use std::io::{Write, Error};
 use regex::*;
 
 
-const BOLD_REGEX: &str = r"\*{2}(?P<text>.+?)\*{2}";
-const ITALIC_REGEX: &str= r"_(?P<text>.+?)_";
+const BOLD_REGEX: &str = r"\*{2}(?P<text>[^\*]+?)\*{2}";
+const ITALIC_REGEX: &str= r"_(?P<text>[^_]+?)_";
 
 pub fn into_braces(string: &String) -> String {
     let mut str_with_braces: String = String::from("{");
@@ -39,10 +39,10 @@ pub fn write_indented_line(doc: &Document, num_tabs: &usize, text: &str) -> Resu
 
 enum FormatType {
     Bold,
-    Italic
+    Italic,
 }
 
-impl FormatType{
+impl FormatType {
     fn handle_formatting(&self, text: &String) -> String {
         match self {
             FormatType::Bold => into_bold(text),
@@ -57,32 +57,32 @@ pub fn handle_text_format(text: String) -> String {
 }
 
 fn handle_bold(text: String) -> String {
-    let bold_regex = Regex::new(BOLD_REGEX);
+    let bold_regex: Result<Regex, regex::Error> = Regex::new(BOLD_REGEX);
 
     match bold_regex {
         Ok(regex) => replace_matches(text, regex, FormatType::Bold),
 
         Err(error) => {
-            println!("Bold Regex error: {}", error);
+            println!("Bold regex error: {}", error);
             text
         }
     }
 }
 
 fn handle_italic(text: String) -> String {
-    let italic_regex = Regex::new(ITALIC_REGEX);
+    let italic_regex: Result<Regex, regex::Error> = Regex::new(ITALIC_REGEX);
 
     match italic_regex {
         Ok(regex) => replace_matches(text, regex, FormatType::Italic),
 
         Err(error) => {
-            println!("Italic Regex error: {}", error);
+            println!("Italic regex error: {}", error);
             text
         }
     }
 }
 
-fn replace_matches(text: String, regex: Regex, format_type: FormatType) -> String{
+fn replace_matches(text: String, regex: Regex, format_type: FormatType) -> String {
     let captures = regex.captures_iter(&text);
     let mut new_text = text.clone();
 
