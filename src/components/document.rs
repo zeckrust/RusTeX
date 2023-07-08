@@ -39,13 +39,10 @@ impl Document {
     }
 
     fn build_doc_class(&mut self) -> Result<(), Error> {
-        let mut doc_class_str: String = format!("{}[", DEF_DOCUMENT_CLASS);
+        let options_str = self.class.options.join(", ");
+        let mut doc_class_str = format!("{}{}", DEF_DOCUMENT_CLASS, into_brackets(&options_str));
+        doc_class_str = format!("{}{}", doc_class_str, into_braces(&self.class.name.to_str()));
 
-        for option in &self.class.options {
-            doc_class_str = format!("{}{},", doc_class_str, option);
-        }
-
-        doc_class_str = format!("{}]{}", doc_class_str, into_braces(&self.class.name.to_str()));
         writeln!(self.file, "{}", doc_class_str)?;
         self.add_blank_line()
     }
@@ -132,13 +129,10 @@ pub struct Package {
 
 impl Package {
     pub fn build(&self, doc: &Document) -> Result<(), Error> {
-        let mut package_str: String = format!("{}[", DEF_PACKAGE);
+        let options_str = self.options.join(", ");
+        let mut package_str: String = format!("{}{}", DEF_PACKAGE, into_brackets(&options_str));
+        package_str = format!("{}{}", package_str, into_braces(&self.name));
 
-        for option in &self.options {
-            package_str = format!("{}{},", package_str, option);
-        }
-
-        package_str = format!("{}]{}", package_str, into_braces(&self.name));
         writeln!(&doc.file, "{}", package_str)
     }
 }

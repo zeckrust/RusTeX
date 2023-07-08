@@ -3,6 +3,10 @@ use crate::components::document::*;
 use std::io::{Write, Error};
 use regex::*;
 
+
+const BOLD_REGEX: &str = r"\*{2}(?P<text>.+?)\*{2}";
+const ITALIC_REGEX: &str= r"_(?P<text>.+?)_";
+
 pub fn into_braces(string: &String) -> String {
     let mut str_with_braces: String = String::from("{");
     str_with_braces = format!("{}{}", str_with_braces, string);
@@ -33,16 +37,12 @@ pub fn write_indented_line(doc: &Document, num_tabs: &usize, text: &str) -> Resu
     writeln!(&doc.file, "{}", text)
 }
 
-const BOLD_REGEX: &str = r"\*{2}(?P<text>.+?)\*{2}";
-const ITALIC_REGEX: &str= r"_(?P<text>.+?)_";
-
 enum FormatType {
     Bold,
     Italic
 }
 
 impl FormatType{
-
     fn handle_formatting(&self, text: &String) -> String {
         match self {
             FormatType::Bold => into_bold(text),
