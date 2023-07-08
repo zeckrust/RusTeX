@@ -1,7 +1,7 @@
 use std::io::{Write, Error};
 use super::item::*;
 use super::document::*;
-use crate::utilities::def_constants::*;
+use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
 pub trait Container: Item {

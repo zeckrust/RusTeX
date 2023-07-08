@@ -1,2 +1,2 @@
 pub mod format;
-pub mod def_constants;
+pub mod def_syntax;

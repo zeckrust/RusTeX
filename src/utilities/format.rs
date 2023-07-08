@@ -1,4 +1,4 @@
-use super::def_constants::*;
+use super::def_syntax::*;
 use crate::components::document::*;
 use std::io::{Write, Error};
 use regex::*;
