@@ -4,7 +4,7 @@ mod utilities;
 use components::document::*;
 use components::item::*;
 use components::container::*;
-use std::{fs::File, collections::LinkedList};
+use std::fs::File;
 
 const DOCUMENT_NAME: &str = "generated_tex/main.tex";
 const DOCUMENT_CLASS: ClassType = ClassType::Article;
@@ -15,7 +15,7 @@ fn main() -> std::io::Result<()> {
 
     let doc_class: DocumentClass = DocumentClass::new(
         DOCUMENT_CLASS,
-        LinkedList::from([FONT_SIZE.to_string()])
+        vec![FONT_SIZE.to_string()]
     );
 
     let mut doc: Document = Document::new(doc_file, doc_class);
@@ -23,15 +23,15 @@ fn main() -> std::io::Result<()> {
     let packages = Vec::<Package>::from([
         Package {
             name: String::from("babel"),
-            options: LinkedList::from([String::from("french")])
+            options: vec![String::from("french")]
         },
         Package {
             name: String::from("geometry"),
-            options: LinkedList::from([String::from("margin=2.5cm")])
+            options: vec![String::from("margin=2.5cm")]
         },
         Package {
             name: String::from("fontenc"),
-            options: LinkedList::from([String::from("T1")])
+            options: vec![String::from("T1")]
         }
     ]);
 

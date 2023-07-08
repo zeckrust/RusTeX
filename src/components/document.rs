@@ -1,4 +1,3 @@
-use std::collections::LinkedList;
 use std::fs::File;
 use std::io::{Write, Error};
 use super::item::*;
@@ -92,11 +91,11 @@ impl Document {
 
 pub struct DocumentClass {
     name: ClassType,
-    options: LinkedList<String>
+    options: Vec<String>
 }
 
 impl DocumentClass {
-    pub fn new(class_type: ClassType, options: LinkedList<String>) -> Self {
+    pub fn new(class_type: ClassType, options: Vec<String>) -> Self {
         Self {
             name: class_type,
             options: options
@@ -128,7 +127,7 @@ impl ClassType {
 
 pub struct Package {
     pub name: String,
-    pub options: LinkedList<String>
+    pub options: Vec<String>
 }
 
 impl Package {
