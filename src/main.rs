@@ -20,20 +20,20 @@ fn main() -> std::io::Result<()> {
 
     let mut doc: Document = Document::new(doc_file, doc_class);
 
-    let packages = Vec::<Package>::from([
-        Package {
-            name: String::from("babel"),
-            options: vec![String::from("french")]
-        },
-        Package {
-            name: String::from("geometry"),
-            options: vec![String::from("margin=2.5cm")]
-        },
-        Package {
-            name: String::from("fontenc"),
-            options: vec![String::from("T1")]
-        }
-    ]);
+    let packages = vec![
+        Package::new(
+            String::from("babel"),
+            vec![String::from("french")]
+        ),
+        Package::new(
+            String::from("geometry"),
+            vec!["margin=2.5cm".to_string()]
+        ),
+        Package::new(
+            String::from("fontenc"),
+            vec![String::from("T1")]
+        )
+    ];
 
     doc.add_packages(packages);
 

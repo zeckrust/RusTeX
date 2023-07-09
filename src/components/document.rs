@@ -123,11 +123,18 @@ impl ClassType {
 }
 
 pub struct Package {
-    pub name: String,
-    pub options: Vec<String>
+    name: String,
+    options: Vec<String>
 }
 
 impl Package {
+    pub fn new(_name: String, _options: Vec<String>) -> Self {
+        Self {
+            name: _name,
+            options: _options
+        }
+    }
+
     pub fn build(&self, doc: &Document) -> Result<(), Error> {
         let options_str = self.options.join(", ");
         let mut package_str: String = format!("{}{}", DEF_PACKAGE, into_brackets(&options_str));
