@@ -91,7 +91,3 @@ impl Item for Figure {
         self.indent= super_indent + 1;
     }
 }
-
-// pub struct Table {
-//     //@TODO: Implement as Item
-// }

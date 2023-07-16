@@ -23,6 +23,9 @@ pub const DEF_END_FIGURE: &str = r"\end{figure}";
 pub const DEF_INCLUDE_GRAPH: &str = r"\includegraphics";
 pub const DEF_CAPTION: &str = r"\caption";
 
+// Table
+pub const DEF_HORIZONTAL_LINE: &str = r"\hline";
+
 // Section
 pub const DEF_SECTION: &str = r"\section";
 pub const DEF_SUB_SECTION: &str = r"\subsection";
