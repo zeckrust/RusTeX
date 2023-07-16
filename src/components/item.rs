@@ -61,6 +61,34 @@ impl Figure {
             indent: 0
         }
     }
+
+    fn build_caption(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+        match &self.caption {
+            Some(caption) => {
+                let caption_str = format!("{}{}", DEF_CAPTION, into_braces(&caption.get_string()));
+                write_indented_line(&doc, inner_indent, &caption_str)?;
+            }
+            None => {}
+        }
+
+        Ok(())
+    }
+
+    fn build_centering (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+        if self.centered {
+            write_indented_line(&doc, inner_indent, DEF_CENTERING)?;
+        }
+
+        Ok(())
+    }
+
+    fn build_graphic (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+        let include_graph_str = format!("{}{}{}", DEF_INCLUDE_GRAPH,
+                                        into_brackets(&self.image_option),
+                                        into_braces(&self.image_path));
+
+        write_indented_line(&doc, inner_indent, &include_graph_str)
+    }
 }
 
 impl Item for Figure {
@@ -70,22 +98,9 @@ impl Item for Figure {
         let begin_figure_str = format!("{}{}", DEF_BEGIN_FIGURE, into_brackets(&self.positioning));
         write_indented_line(&doc, &self.indent, &begin_figure_str)?;
 
-        if self.centered {
-            write_indented_line(&doc, inner_indent, DEF_CENTERING)?;
-        }
-
-        let include_graph_str = format!("{}{}{}", DEF_INCLUDE_GRAPH,
-                                        into_brackets(&self.image_option),
-                                        into_braces(&self.image_path));
-        write_indented_line(&doc, inner_indent, &include_graph_str)?;
-
-        match &self.caption {
-            Some(caption) => {
-                let caption_str = format!("{}{}", DEF_CAPTION, into_braces(&caption.get_string()));
-                write_indented_line(&doc, inner_indent, &caption_str)?;
-            }
-            None => {}
-        }
+        self.build_centering(&doc, inner_indent)?;
+        self.build_graphic(&doc, inner_indent)?;
+        self.build_caption(&doc, inner_indent)?;
 
         write_indented_line(&doc, &self.indent, DEF_END_FIGURE)?;
         doc.add_blank_line()

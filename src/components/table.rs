@@ -6,18 +6,22 @@ use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
 pub struct Table {
+    positioning: String,
     options: String,
     components: Vec<Box<dyn TableComponent>>,
     centered: bool,
+    caption: Option<Text>,
     indent: usize
 }
 
 impl Table {
-    pub fn new(_options: String, _centered: bool) -> Self {
+    pub fn new(_positioning: String, _options: String, _centered: bool, _caption: Option<Text>) -> Self {
         Self {
+            positioning: _positioning,
             options: _options,
             components: Vec::new(),
             centered: _centered,
+            caption: _caption,
             indent: 0
         }
     }
@@ -25,20 +29,51 @@ impl Table {
     pub fn add_component<TC: TableComponent + 'static>(&mut self, component: TC) {
         self.components.push(Box::new(component));
     }
-}
 
-impl Item for Table {
-    fn build(&self, doc: &Document) -> Result<(), Error> {
-        if self.centered { write_indented_line(&doc, &self.indent, DEF_BEGIN_CENTER)? };
+    fn build_tabular(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
         let begin_tabular_str = format!("{}{}", DEF_BEGIN_TABULAR, into_braces(&self.options));
-        write_indented_line(&doc, &self.indent, &begin_tabular_str)?;
+        write_indented_line(&doc, inner_indent, &begin_tabular_str)?;
 
         for component in &self.components {
             component.build(&doc)?;
         }
 
-        write_indented_line(&doc, &self.indent, DEF_END_TABULAR)?;
-        if self.centered { write_indented_line(&doc, &self.indent, DEF_END_CENTER)? };
+        write_indented_line(&doc, inner_indent, DEF_END_TABULAR)
+    }
+
+    fn build_caption(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+        match &self.caption {
+            Some(caption) => {
+                let caption_str = format!("{}{}", DEF_CAPTION, into_braces(&caption.get_string()));
+                write_indented_line(&doc, inner_indent, &caption_str)?;
+            }
+            None => {}
+        }
+
+        Ok(())
+    }
+
+    fn build_centering (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+        if self.centered {
+            write_indented_line(&doc, inner_indent,DEF_CENTERING )?;
+        }
+
+        Ok(())
+    }
+}
+
+impl Item for Table {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        let inner_indent = &(self.indent + 1);
+
+        let begin_table_str = format!("{}{}", DEF_BEGIN_TABLE, into_brackets(&self.positioning));
+        write_indented_line(&doc, &self.indent, &begin_table_str)?;
+
+        self.build_centering(&doc, inner_indent)?;
+        self.build_tabular(&doc, inner_indent)?;
+        self.build_caption(&doc, inner_indent)?;
+
+        write_indented_line(&doc, &self.indent, DEF_END_TABLE)?;
         doc.add_blank_line()
     }
 
@@ -51,7 +86,7 @@ impl Item for Table {
 impl Container for Table {
     fn update_nested_indent(&mut self) {
         for component in &mut self.components {
-            component.update_indent(&self.indent);
+            component.update_indent(&(self.indent + 1));
         }
     }
 }

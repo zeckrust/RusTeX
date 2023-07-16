@@ -86,7 +86,12 @@ fn main() -> std::io::Result<()> {
     section_1.add_item(paragraph_1);
     section_1.add_item(sub_section_1);
 
-    let mut table_1: Table = Table::new(String::from("|c|c|c|"), true);
+    let mut table_1: Table = Table::new(
+        String::from("H"),
+        String::from("|c|c|c|"),
+        true,
+        Some(Text::new(String::from("Random caption")))
+    );
 
     table_1.add_component(HorizontalLine::new());
     let table_row_1 = TableRow::new(vec![Text::new(String::from(r"\multicolumn{3}{|c|}{**Lorem Ipsum**}"))]);
