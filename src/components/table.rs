@@ -1,33 +1,64 @@
-use std::io::{Error};
+use std::io::Error;
 use super::document::*;
 use super::item::*;
+use super::container::Container;
 use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
 pub struct Table {
     options: String,
-    dimensions: TableDimensions,
     components: Vec<Box<dyn TableComponent>>,
+    centered: bool,
     indent: usize
 }
 
-struct TableDimensions {
-    rows: usize,
-    columns: usize
-}
-
- impl TableDimensions {
-    pub fn new(_rows: usize, _columns: usize) -> Self {
+impl Table {
+    pub fn new(_options: String, _centered: bool) -> Self {
         Self {
-            rows: _rows,
-            columns: _columns
+            options: _options,
+            components: Vec::new(),
+            centered: _centered,
+            indent: 0
         }
     }
- }
 
-trait TableComponent: Item {}
+    pub fn add_component<TC: TableComponent + 'static>(&mut self, component: TC) {
+        self.components.push(Box::new(component));
+    }
+}
 
-struct HorizontalLine {
+impl Item for Table {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        if self.centered { write_indented_line(&doc, &self.indent, DEF_BEGIN_CENTER)? };
+        let begin_tabular_str = format!("{}{}", DEF_BEGIN_TABULAR, into_braces(&self.options));
+        write_indented_line(&doc, &self.indent, &begin_tabular_str)?;
+
+        for component in &self.components {
+            component.build(&doc)?;
+        }
+
+        write_indented_line(&doc, &self.indent, DEF_END_TABULAR)?;
+        if self.centered { write_indented_line(&doc, &self.indent, DEF_END_CENTER)? };
+        doc.add_blank_line()
+    }
+
+    fn update_indent(&mut self, super_indent: &usize) {
+        self.indent= super_indent + 1;
+        self.update_nested_indent();
+    }
+}
+
+impl Container for Table {
+    fn update_nested_indent(&mut self) {
+        for component in &mut self.components {
+            component.update_indent(&self.indent);
+        }
+    }
+}
+
+pub trait TableComponent: Item {}
+
+pub struct HorizontalLine {
     indent: usize
 }
 
@@ -51,13 +82,13 @@ impl Item for HorizontalLine {
 
 impl TableComponent for HorizontalLine {}
 
-struct TableRow {
-    content: Vec<String>,
+pub struct TableRow {
+    content: Vec<Text>,
     indent: usize
 }
 
 impl TableRow {
-    pub fn new(_content: Vec<String>) -> Self {
+    pub fn new(_content: Vec<Text>) -> Self {
         Self {
             content: _content,
             indent: 0
@@ -67,7 +98,13 @@ impl TableRow {
 
 impl Item for TableRow {
     fn build(&self, doc: &Document) -> Result<(), Error> {
-        let formatted_row: String = self.content.join(" & ");
+        let mut cells: Vec<String> = Vec::new();
+        for cell in &self.content {
+            cells.push(cell.get_string())
+        }
+
+        let mut formatted_row: String = cells.join(" & ");
+        formatted_row = format!("{} \\\\", formatted_row);
         write_indented_line(&doc, &self.indent, &formatted_row)
     }
 

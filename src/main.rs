@@ -4,6 +4,7 @@ mod utilities;
 use components::document::*;
 use components::item::*;
 use components::container::*;
+use components::table::*;
 use std::fs::File;
 
 const DOCUMENT_NAME: &str = "generated_tex/main.tex";
@@ -85,6 +86,28 @@ fn main() -> std::io::Result<()> {
     section_1.add_item(paragraph_1);
     section_1.add_item(sub_section_1);
 
+    let mut table_1: Table = Table::new(String::from("|c|c|c|"), true);
+
+    table_1.add_component(HorizontalLine::new());
+    let table_row_1 = TableRow::new(vec![Text::new(String::from(r"\multicolumn{3}{|c|}{**Lorem Ipsum**}"))]);
+    table_1.add_component(table_row_1);
+    table_1.add_component(HorizontalLine::new());
+    let table_row_2 = TableRow::new(vec![
+        Text::new(String::from("First")),
+        Text::new(String::from("Second")),
+        Text::new(String::from("Third"))]
+    );
+    table_1.add_component(table_row_2);
+    table_1.add_component(HorizontalLine::new());
+    let table_row_3 = TableRow::new(vec![
+        Text::new(String::from("Test 1")),
+        Text::new(String::from("Test 2")),
+        Text::new(String::from("Test 3"))]
+    );
+    table_1.add_component(table_row_3);
+    table_1.add_component(HorizontalLine::new());
+
+    section_1.add_item(table_1);
     doc.add_item(section_1);
 
     doc.build()

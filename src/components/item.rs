@@ -1,4 +1,4 @@
-use std::io::{Error};
+use std::io::Error;
 use super::document::*;
 use crate::utilities::format::*;
 use crate::utilities::def_syntax::*;
@@ -20,6 +20,10 @@ impl Text {
             text: handle_text_format(_text),
             indent: 0
         }
+    }
+
+    pub fn get_string(&self) -> String {
+        self.text.clone()
     }
 }
 
@@ -77,7 +81,7 @@ impl Item for Figure {
 
         match &self.caption {
             Some(caption) => {
-                let caption_str = format!("{}{}", DEF_CAPTION, into_braces(&caption.text));
+                let caption_str = format!("{}{}", DEF_CAPTION, into_braces(&caption.get_string()));
                 write_indented_line(&doc, inner_indent, &caption_str)?;
             }
             None => {}

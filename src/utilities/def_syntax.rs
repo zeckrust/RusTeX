@@ -24,6 +24,8 @@ pub const DEF_INCLUDE_GRAPH: &str = r"\includegraphics";
 pub const DEF_CAPTION: &str = r"\caption";
 
 // Table
+pub const DEF_BEGIN_TABULAR: &str = r"\begin{tabular}";
+pub const DEF_END_TABULAR: &str = r"\end{tabular}";
 pub const DEF_HORIZONTAL_LINE: &str = r"\hline";
 
 // Section
@@ -33,6 +35,8 @@ pub const DEF_SUB_SUB_SECTION: &str = r"\subsubsection";
 
 // Positioning
 pub const DEF_CENTERING: &str = r"\centering";
+pub const DEF_BEGIN_CENTER: &str = r"\begin{center}";
+pub const DEF_END_CENTER: &str = r"\end{center}";
 
 // Formatting
 pub const DEF_BOLD: &str = r"\textbf";
