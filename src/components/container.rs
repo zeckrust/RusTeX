@@ -134,8 +134,8 @@ impl Item for Section {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         indent_line(&doc, &self.indent)?;
         match self.display_num {
-            true => writeln!(&doc.file, "{}*{}\n", self.sec_type.get_def(), into_braces(&self.name))?,
-            false => writeln!(&doc.file, "{}{}\n", self.sec_type.get_def(), into_braces(&self.name))?
+            true => writeln!(doc.get_file(), "{}*{}\n", self.sec_type.get_def(), into_braces(&self.name))?,
+            false => writeln!(doc.get_file(), "{}{}\n", self.sec_type.get_def(), into_braces(&self.name))?
         }
 
         for item in &self.items {

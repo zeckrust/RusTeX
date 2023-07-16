@@ -66,12 +66,10 @@ impl Figure {
         match &self.caption {
             Some(caption) => {
                 let caption_str = format!("{}{}", DEF_CAPTION, into_braces(&caption.get_string()));
-                write_indented_line(&doc, inner_indent, &caption_str)?;
+                write_indented_line(&doc, inner_indent, &caption_str)
             }
-            None => {}
+            None => Ok(())
         }
-
-        Ok(())
     }
 
     fn build_centering (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
@@ -104,6 +102,30 @@ impl Item for Figure {
 
         write_indented_line(&doc, &self.indent, DEF_END_FIGURE)?;
         doc.add_blank_line()
+    }
+
+    fn update_indent(&mut self, super_indent: &usize) {
+        self.indent= super_indent + 1;
+    }
+}
+
+pub struct Command {
+    command: String,
+    indent: usize
+}
+
+impl Command {
+    pub fn new(_command: String) -> Self {
+        Self {
+            command: _command,
+            indent: 0
+        }
+    }
+}
+
+impl Item for Command {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        write_indented_line(&doc, &self.indent, &self.command)
     }
 
     fn update_indent(&mut self, super_indent: &usize) {

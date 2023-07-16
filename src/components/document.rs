@@ -6,10 +6,11 @@ use crate::utilities::format::*;
 
 
 pub struct Document {
-    pub file: File,
-    pub class: DocumentClass,
-    pub packages: Vec<Package>,
-    pub items: Vec<Box<dyn Item>>
+    file: File,
+    class: DocumentClass,
+    packages: Vec<Package>,
+    commands: Vec<Command>,
+    items: Vec<Box<dyn Item>>
 }
 
 impl Document {
@@ -18,8 +19,13 @@ impl Document {
             file: doc_file,
             class: doc_class,
             packages: Vec::new(),
+            commands: Vec::new(),
             items: Vec::new()
         }
+    }
+
+    pub fn get_file(&self) -> &File {
+        &self.file
     }
 
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
@@ -27,12 +33,17 @@ impl Document {
     }
 
     pub fn add_packages(&mut self, _packages: Vec<Package>) {
-        self.packages.extend(_packages)
+        self.packages.extend(_packages);
+    }
+
+    pub fn add_commands(&mut self, _commands: Vec<Command>) {
+        self.commands.extend(_commands);
     }
 
     pub fn build(&mut self) -> Result<(), Error> {
         self.build_doc_class()?;
         self.build_packages()?;
+        self.build_commands()?;
         self.update_indents();
         self.build_items()?;
         Ok(())
@@ -62,6 +73,15 @@ impl Document {
         writeln!(&self.file, "{}", DEFAULT_PACKAGES_COMMENT)?;
         writeln!(&self.file, "{}", DEFAULT_FLOAT_PACKAGE)?;
         writeln!(&self.file, "{}", DEFAULT_GRAPHICX_PACKAGE)?;
+        self.add_blank_line()
+    }
+
+    fn build_commands(&mut self) -> Result<(), Error> {
+        writeln!(&self.file, "{}", USER_COMMANDS_COMMENT)?;
+        for command in &self.commands {
+            command.build(&self)?;
+        }
+
         self.add_blank_line()
     }
 

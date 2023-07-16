@@ -12,6 +12,9 @@ pub const DEFAULT_PACKAGES_COMMENT: &str = r"% Default packages";
 pub const DEFAULT_FLOAT_PACKAGE: &str = r"\usepackage{float}";
 pub const DEFAULT_GRAPHICX_PACKAGE: &str = r"\usepackage{graphicx}";
 
+// Command
+pub const USER_COMMANDS_COMMENT: &str = r"% Added commands";
+
 // Enumerate
 pub const DEF_BEGIN_ENUMERATE: &str = r"\begin{enumerate}";
 pub const DEF_END_ENUMERATE: &str = r"\end{enumerate}";

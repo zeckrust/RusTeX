@@ -38,6 +38,13 @@ fn main() -> std::io::Result<()> {
 
     doc.add_packages(packages);
 
+    let commands = vec![
+        Command::new(String::from(r"\setlength{\arrayrulewidth}{0.5mm}")),
+        Command::new(String::from(r"\setlength{\tabcolsep}{18pt}"))
+    ];
+
+    doc.add_commands(commands);
+
     let mut section_1: Section = Section::new(
         String::from("Section"),
         SectionType::Section,
