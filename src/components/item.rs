@@ -132,3 +132,27 @@ impl Item for Command {
         self.indent= super_indent + 1;
     }
 }
+
+pub struct PageBreak {
+    indent: usize
+}
+
+impl PageBreak {
+    pub fn new() -> Self {
+        Self {
+            indent: 0
+        }
+    }
+}
+
+impl Item for PageBreak {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        write_indented_line(&doc, &self.indent, DEF_NEW_PAGE)?;
+        doc.add_blank_line()
+    }
+
+    fn update_indent(&mut self, super_indent: &usize) {
+        self.indent= super_indent + 1;
+    }
+
+}

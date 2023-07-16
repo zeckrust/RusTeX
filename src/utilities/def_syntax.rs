@@ -37,6 +37,9 @@ pub const DEF_SECTION: &str = r"\section";
 pub const DEF_SUB_SECTION: &str = r"\subsection";
 pub const DEF_SUB_SUB_SECTION: &str = r"\subsubsection";
 
+// Page Break
+pub const DEF_NEW_PAGE: &str = r"\newpage";
+
 // Caption
 pub const DEF_CAPTION: &str = r"\caption";
 
