@@ -8,7 +8,7 @@ use components::table::*;
 use std::fs::File;
 
 const DOCUMENT_NAME: &str = "generated_tex/main.tex";
-const DOCUMENT_CLASS: ClassType = ClassType::Article;
+const DOCUMENT_CLASS: ClassType = ClassType::Report;
 const FONT_SIZE: &str = "12pt";
 
 fn main() -> std::io::Result<()> {
@@ -120,7 +120,11 @@ fn main() -> std::io::Result<()> {
     table_1.add_component(HorizontalLine::new());
 
     section_1.add_item(table_1);
-    doc.add_item(section_1);
+
+    let mut chapter_1 = Chapter::new(String::from("Lorem Ipsum"), true);
+    chapter_1.add_item(section_1);
+
+    doc.add_item(chapter_1);
 
     doc.build()
 }

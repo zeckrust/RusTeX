@@ -134,8 +134,8 @@ impl Item for Section {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         indent_line(&doc, &self.indent)?;
         match self.display_num {
-            true => writeln!(doc.get_file(), "{}*{}\n", self.sec_type.get_def(), into_braces(&self.name))?,
-            false => writeln!(doc.get_file(), "{}{}\n", self.sec_type.get_def(), into_braces(&self.name))?
+            true => writeln!(doc.get_file(), "{}{}\n", self.sec_type.get_def(), into_braces(&self.name))?,
+            false => writeln!(doc.get_file(), "{}*{}\n", self.sec_type.get_def(), into_braces(&self.name))?
         }
 
         for item in &self.items {
@@ -152,6 +152,57 @@ impl Item for Section {
 }
 
 impl Container for Section {
+    fn update_nested_indent(&mut self) {
+        for item in &mut self.items {
+            item.update_indent(&self.indent);
+        }
+    }
+}
+
+pub struct Chapter {
+    name: String,
+    display_num: bool,
+    items: Vec<Box<dyn Item>>,
+    indent: usize
+}
+
+impl Chapter {
+    pub fn new(_name: String, _display_num: bool) -> Self {
+        Self {
+            name: _name,
+            display_num: _display_num,
+            items: Vec::new(),
+            indent: 0
+        }
+    }
+
+    pub fn add_item<I: Item + 'static>(&mut self, item: I) {
+        self.items.push(Box::new(item));
+    }
+}
+
+impl Item for Chapter {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        indent_line(&doc, &self.indent)?;
+        match self.display_num {
+            true => writeln!(doc.get_file(), "{}{}\n", DEF_CHAPTER, into_braces(&self.name))?,
+            false => writeln!(doc.get_file(), "{}*{}\n", DEF_CHAPTER, into_braces(&self.name))?
+        }
+
+        for item in &self.items {
+            item.build(doc)?;
+        }
+
+        Ok(())
+    }
+
+    fn update_indent(&mut self, super_indent: &usize) {
+        self.indent = super_indent + 1;
+        self.update_nested_indent();
+    }
+}
+
+impl Container for Chapter {
     fn update_nested_indent(&mut self) {
         for item in &mut self.items {
             item.update_indent(&self.indent);

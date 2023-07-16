@@ -52,7 +52,7 @@ impl Document {
     fn build_doc_class(&mut self) -> Result<(), Error> {
         let options_str = self.class.options.join(", ");
         let mut doc_class_str = format!("{}{}", DEF_DOCUMENT_CLASS, into_brackets(&options_str));
-        doc_class_str = format!("{}{}", doc_class_str, into_braces(&self.class.name.to_str()));
+        doc_class_str = format!("{}{}", doc_class_str, into_braces(&self.class._type.to_str()));
 
         writeln!(self.file, "{}", doc_class_str)?;
         self.add_blank_line()
@@ -107,14 +107,14 @@ impl Document {
 }
 
 pub struct DocumentClass {
-    name: ClassType,
+    _type: ClassType,
     options: Vec<String>
 }
 
 impl DocumentClass {
     pub fn new(class_type: ClassType, options: Vec<String>) -> Self {
         Self {
-            name: class_type,
+            _type: class_type,
             options: options
         }
     }
