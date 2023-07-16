@@ -36,7 +36,7 @@ impl Document {
         self.packages.extend(_packages);
     }
 
-    pub fn add_commands(&mut self, _commands: Vec<Command>) {
+    pub fn add_global_commands(&mut self, _commands: Vec<Command>) {
         self.commands.extend(_commands);
     }
 
@@ -77,7 +77,7 @@ impl Document {
     }
 
     fn build_commands(&mut self) -> Result<(), Error> {
-        writeln!(&self.file, "{}", USER_COMMANDS_COMMENT)?;
+        writeln!(&self.file, "{}", USER_GLOBAL_COMMANDS_COMMENT)?;
         for command in &self.commands {
             command.build(&self)?;
         }

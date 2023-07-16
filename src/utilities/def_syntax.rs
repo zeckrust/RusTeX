@@ -13,7 +13,7 @@ pub const DEFAULT_FLOAT_PACKAGE: &str = r"\usepackage{float}";
 pub const DEFAULT_GRAPHICX_PACKAGE: &str = r"\usepackage{graphicx}";
 
 // Command
-pub const USER_COMMANDS_COMMENT: &str = r"% Added commands";
+pub const USER_GLOBAL_COMMANDS_COMMENT: &str = r"% Added global commands";
 
 // Enumerate
 pub const DEF_BEGIN_ENUMERATE: &str = r"\begin{enumerate}";

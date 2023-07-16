@@ -39,11 +39,18 @@ fn main() -> std::io::Result<()> {
     doc.add_packages(packages);
 
     let commands = vec![
-        Command::new(String::from(r"\setlength{\arrayrulewidth}{0.5mm}")),
+        Command::new(String::from(r"\title{Title}")),
+        Command::new(String::from(r"\author{Author}")),
+        Command::new(String::from(r"\date{YYYY / MM / DD}")),
         Command::new(String::from(r"\setlength{\tabcolsep}{18pt}"))
     ];
 
-    doc.add_commands(commands);
+    doc.add_global_commands(commands);
+
+    doc.add_item(Command::new(String::from(r"\maketitle")));
+    doc.add_item(Command::new(String::from(r"\tableofcontents")));
+
+    let mut chapter_1 = Chapter::new(String::from("Lorem Ipsum"), true);
 
     let mut section_1: Section = Section::new(
         String::from("Section"),
@@ -53,9 +60,11 @@ fn main() -> std::io::Result<()> {
 
     let paragraph_1 = Text::new(
         String::from(
-            "This is a **paragraph** test. Lets **see** if
-            writing on many _lines_ still works.
-            It _seems_ like it is working!"
+            "Lorem ipsum dolor sit amet, **consectetur** adipiscing elit. Integer congue nisi condimentum
+            lacus vulputate cursus. _Curabitur_ bibendum orci ac nibh vestibulum ultrices. Aenean pulvinar
+            mattis lectus, sed vehicula leo pellentesque eget. Sed sed quam sit amet nulla lacinia mollis.
+            Maecenas dignissim, augue quis suscipit pellentesque, ipsum turpis facilisis eros, eu aliquam
+            erat massa sit amet ex."
         )
     );
 
@@ -67,18 +76,19 @@ fn main() -> std::io::Result<()> {
 
     let paragraph_2 = Text::new(
         String::from(
-            "This is a paragraph. I can write anything.
-            BLABALABLABALABALABALABALABALABALABALABA
-            ABHDLBFKNSABFHISKA F fjakfbjsab jfakfjsa. Nice!"
+            "Sed ut augue vel arcu varius accumsan. Quisque ipsum risus, pulvinar in aliquet sodales,
+            aliquet quis odio. Quisque accumsan bibendum egestas. Nullam vel est faucibus, egestas
+            urna in, tempor risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+            posuere cubilia curae"
         )
     );
 
     let figure_1 = Figure::new(
         String::from("H"),
         true,
-        String::from("itachi_sasuke.jpg"),
-        String::from("scale=0.2"),
-        Some(Text::new(String::from("**Itachi** and **Sasuke**")))
+        String::from("lorem_ipsum.jpg"),
+        String::from("scale=0.35"),
+        Some(Text::new(String::from("**Lorem** _Ipsum_")))
     );
 
     let mut block_1: Block = Block::new();
@@ -121,7 +131,6 @@ fn main() -> std::io::Result<()> {
 
     section_1.add_item(table_1);
 
-    let mut chapter_1 = Chapter::new(String::from("Lorem Ipsum"), true);
     chapter_1.add_item(section_1);
 
     doc.add_item(chapter_1);
