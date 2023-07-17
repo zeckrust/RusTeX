@@ -23,8 +23,8 @@ fn main() -> std::io::Result<()> {
 
     let packages = vec![
         Package::new(
-            String::from("babel"),
-            vec![String::from("french")]
+            "babel",
+            vec!["english"]
         ),
         Package::new(
             String::from("geometry"),
