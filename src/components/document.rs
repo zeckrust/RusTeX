@@ -40,13 +40,12 @@ impl Document {
         self.commands.extend(_commands);
     }
 
-    pub fn build(&mut self) -> Result<(), Error> {
-        self.build_doc_class()?;
-        self.build_packages()?;
-        self.build_commands()?;
+    pub fn build(&mut self) {
         self.update_indents();
-        self.build_items()?;
-        Ok(())
+        self.build_doc_class().unwrap();
+        self.build_packages().unwrap();
+        self.build_commands().unwrap();
+        self.build_items().unwrap();
     }
 
     fn build_doc_class(&mut self) -> Result<(), Error> {

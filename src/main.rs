@@ -11,8 +11,8 @@ const DOCUMENT_NAME: &str = "generated_tex/main.tex";
 const DOCUMENT_CLASS: ClassType = ClassType::Report;
 const FONT_SIZE: &str = "12pt";
 
-fn main() -> std::io::Result<()> {
-    let doc_file: File = File::create(DOCUMENT_NAME)?;
+fn main()  {
+    let doc_file: File = File::create(DOCUMENT_NAME).unwrap();
 
     let doc_class: DocumentClass = DocumentClass::new(
         DOCUMENT_CLASS,
@@ -137,5 +137,5 @@ fn main() -> std::io::Result<()> {
 
     doc.add_item(chapter_1);
 
-    doc.build()
+    doc.build();
 }
