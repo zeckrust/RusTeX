@@ -15,10 +15,10 @@ pub struct Table {
 }
 
 impl Table {
-    pub fn new(_positioning: String, _options: String, _centered: bool, _caption: Option<Text>) -> Self {
+    pub fn new(_positioning: &str, _options: &str, _centered: bool, _caption: Option<Text>) -> Self {
         Self {
-            positioning: _positioning,
-            options: _options,
+            positioning: String::from(_positioning),
+            options: String::from(_options),
             components: Vec::new(),
             centered: _centered,
             caption: _caption,

@@ -29,7 +29,7 @@ impl Document {
     }
 
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
-        self.items.push(Box::new(item)); // Box::new() adds it to the heap
+        self.items.push(Box::new(item));
     }
 
     pub fn add_packages(&mut self, _packages: Vec<Package>) {
@@ -112,10 +112,13 @@ pub struct DocumentClass {
 }
 
 impl DocumentClass {
-    pub fn new(class_type: ClassType, options: Vec<String>) -> Self {
+    pub fn new(class_type: ClassType, _options: Vec<&str>) -> Self {
         Self {
             _type: class_type,
-            options: options
+            options: _options
+                .iter()
+                .map(|&option| String::from(option))
+                .collect()
         }
     }
 }
@@ -148,10 +151,13 @@ pub struct Package {
 }
 
 impl Package {
-    pub fn new(_name: String, _options: Vec<String>) -> Self {
+    pub fn new(_name: &str, _options: Vec<&str>) -> Self {
         Self {
-            name: _name,
+            name: String::from(_name),
             options: _options
+                .iter()
+                .map(|&option| String::from(option))
+                .collect()
         }
     }
 
