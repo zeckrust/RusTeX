@@ -15,9 +15,9 @@ pub struct Text {
 }
 
 impl Text {
-    pub fn new(_text: String) -> Self {
+    pub fn new(_text: &str) -> Self {
         Self {
-            text: handle_text_format(_text),
+            text: handle_text_format(String::from(_text)),
             indent: 0
         }
     }
@@ -50,13 +50,13 @@ pub struct Figure {
 }
 
 impl Figure {
-    pub fn new(_positioning: String, _centered: bool, _image_path: String,
-               _image_option: String, _caption: Option<Text>) -> Self {
+    pub fn new(_positioning: &str, _centered: bool, _image_path: &str,
+               _image_option: &str, _caption: Option<Text>) -> Self {
         Self {
-            positioning: _positioning,
+            positioning: String::from(_positioning),
             centered: _centered,
-            image_path: _image_path,
-            image_option: _image_option,
+            image_path: String::from(_image_path),
+            image_option: String::from(_image_option),
             caption: _caption,
             indent: 0
         }
@@ -115,9 +115,9 @@ pub struct Command {
 }
 
 impl Command {
-    pub fn new(_command: String) -> Self {
+    pub fn new(_command: &str) -> Self {
         Self {
-            command: _command,
+            command: String::from(_command),
             indent: 0
         }
     }

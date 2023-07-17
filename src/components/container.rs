@@ -58,7 +58,10 @@ pub struct Block {
 
 impl Block {
     pub fn new() -> Self {
-        Self {items: Vec::new(), indent: 0}
+        Self {
+            items: Vec::new(),
+            indent: 0
+        }
     }
 
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
@@ -115,9 +118,9 @@ pub struct Section {
 }
 
 impl Section {
-    pub fn new(_name: String, _sec_type: SectionType, _display_num: bool) -> Self {
+    pub fn new(_name: &str, _sec_type: SectionType, _display_num: bool) -> Self {
         Self {
-            name: _name,
+            name: String::from(_name),
             sec_type: _sec_type,
             display_num: _display_num,
             items: Vec::new(),
@@ -167,9 +170,9 @@ pub struct Chapter {
 }
 
 impl Chapter {
-    pub fn new(_name: String, _display_num: bool) -> Self {
+    pub fn new(_name: &str, _display_num: bool) -> Self {
         Self {
-            name: _name,
+            name: String::from(_name),
             display_num: _display_num,
             items: Vec::new(),
             indent: 0
