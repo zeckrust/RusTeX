@@ -72,6 +72,7 @@ impl Document {
         writeln!(&self.file, "{}", DEFAULT_PACKAGES_COMMENT)?;
         writeln!(&self.file, "{}", DEFAULT_FLOAT_PACKAGE)?;
         writeln!(&self.file, "{}", DEFAULT_GRAPHICX_PACKAGE)?;
+        writeln!(&self.file, "{}", DEFAULT_XCOLOR_PACKAGE)?;
         self.add_blank_line()
     }
 
@@ -100,6 +101,7 @@ impl Document {
         writeln!(&self.file, "{}", DEF_END_DOCUMENT)
     }
 
+    #[doc(hidden)]
     pub fn add_blank_line(&self) -> Result<(), Error> {
         writeln!(&self.file, "")
     }

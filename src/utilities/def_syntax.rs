@@ -11,6 +11,7 @@ pub const USER_PACKAGES_COMMENT: &str = r"% Added packages";
 pub const DEFAULT_PACKAGES_COMMENT: &str = r"% Default packages";
 pub const DEFAULT_FLOAT_PACKAGE: &str = r"\usepackage{float}";
 pub const DEFAULT_GRAPHICX_PACKAGE: &str = r"\usepackage{graphicx}";
+pub const DEFAULT_XCOLOR_PACKAGE: &str = r"\usepackage{xcolor}";
 
 // Command
 pub const USER_GLOBAL_COMMANDS_COMMENT: &str = r"% Added global commands";
@@ -52,3 +53,4 @@ pub const DEF_CENTERING: &str = r"\centering";
 // Formatting
 pub const DEF_BOLD: &str = r"\textbf";
 pub const DEF_ITALIC: &str = r"\textit";
+pub const DEF_COLOR: &str = r"\color";

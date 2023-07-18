@@ -1,4 +1,5 @@
 mod components;
+#[doc(hidden)]
 mod utilities;
 
 use components::document::*;
@@ -73,7 +74,7 @@ fn main()  {
     );
 
     let paragraph_2 = Text::new(
-        "Sed ut augue vel arcu varius accumsan. Quisque ipsum risus, pulvinar in aliquet sodales,
+        "Sed ut augue vel arcu #blue{varius accumsan}. Quisque ipsum risus, pulvinar in aliquet sodales,
         aliquet quis odio. Quisque accumsan bibendum egestas. Nullam vel est faucibus, egestas
         urna in, tempor risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
         posuere cubilia curae"
@@ -114,9 +115,9 @@ fn main()  {
     table_1.add_component(HorizontalLine::new());
 
     let table_row_2 = TableRow::new(vec![
-        Text::new("First"),
-        Text::new("Second"),
-        Text::new("Third")]
+        Text::new("#red{First}"),
+        Text::new("#violet{Second}"),
+        Text::new("#teal{Third}")]
     );
 
     table_1.add_component(table_row_2);

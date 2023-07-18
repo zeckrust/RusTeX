@@ -17,7 +17,7 @@ pub struct Text {
 impl Text {
     pub fn new(_text: &str) -> Self {
         Self {
-            text: handle_text_format(String::from(_text)),
+            text: format_text(String::from(_text)),
             indent: 0
         }
     }
