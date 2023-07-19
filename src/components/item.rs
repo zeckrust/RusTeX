@@ -1,5 +1,6 @@
 use std::io::Error;
 use super::document::*;
+use super::table::TableComponent;
 use crate::utilities::format::*;
 use crate::utilities::def_syntax::*;
 
@@ -46,18 +47,20 @@ pub struct Figure {
     image_path: String,
     image_option: String,
     caption: Option<Text>,
+    label: String,
     indent: usize
 }
 
 impl Figure {
     pub fn new(_positioning: &str, _centered: bool, _image_path: &str,
-               _image_option: &str, _caption: Option<Text>) -> Self {
+               _image_option: &str, _caption: Option<Text>, _label: &str) -> Self {
         Self {
             positioning: String::from(_positioning),
             centered: _centered,
             image_path: String::from(_image_path),
             image_option: String::from(_image_option),
             caption: _caption,
+            label: String::from(_label),
             indent: 0
         }
     }
@@ -93,7 +96,8 @@ impl Item for Figure {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         let inner_indent: &usize = &(self.indent + 1);
 
-        let begin_figure_str = format!("{}{}", DEF_BEGIN_FIGURE, into_brackets(&self.positioning));
+        let mut begin_figure_str = format!("{}{}", DEF_BEGIN_FIGURE, into_brackets(&self.positioning));
+        begin_figure_str = format!("{} {}", begin_figure_str, into_label(&self.label));
         write_indented_line(&doc, &self.indent, &begin_figure_str)?;
 
         self.build_centering(&doc, inner_indent)?;

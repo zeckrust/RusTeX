@@ -11,17 +11,20 @@ pub struct Table {
     components: Vec<Box<dyn TableComponent>>,
     centered: bool,
     caption: Option<Text>,
+    label: String,
     indent: usize
 }
 
 impl Table {
-    pub fn new(_positioning: &str, _options: &str, _centered: bool, _caption: Option<Text>) -> Self {
+    pub fn new(_positioning: &str, _options: &str, _centered: bool,
+               _caption: Option<Text>, _label: &str) -> Self {
         Self {
             positioning: String::from(_positioning),
             options: String::from(_options),
             components: Vec::new(),
             centered: _centered,
             caption: _caption,
+            label: String::from(_label),
             indent: 0
         }
     }
@@ -66,7 +69,8 @@ impl Item for Table {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         let inner_indent = &(self.indent + 1);
 
-        let begin_table_str = format!("{}{}", DEF_BEGIN_TABLE, into_brackets(&self.positioning));
+        let mut begin_table_str = format!("{}{}", DEF_BEGIN_TABLE, into_brackets(&self.positioning));
+        begin_table_str = format!("{} {}", begin_table_str, into_label(&self.label));
         write_indented_line(&doc, &self.indent, &begin_table_str)?;
 
         self.build_centering(&doc, inner_indent)?;

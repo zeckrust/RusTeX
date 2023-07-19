@@ -10,12 +10,17 @@ pub trait Container: Item {
 
 pub struct Enumerate {
     items: Vec<Box<dyn Item>>,
+    label: String,
     indent: usize
 }
 
 impl Enumerate {
-    pub fn new() -> Self {
-        Self {items: Vec::new(), indent: 0}
+    pub fn new(_label: &str) -> Self {
+        Self {
+            items: Vec::new(),
+            label: String::from(_label),
+            indent: 0
+        }
     }
 
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
@@ -25,7 +30,8 @@ impl Enumerate {
 
 impl Item for Enumerate {
     fn build(&self, doc: &Document) -> Result<(), Error> {
-        write_indented_line(&doc, &self.indent, DEF_BEGIN_ENUMERATE)?;
+        let begin_enumerate_str = format!("{} {}", DEF_BEGIN_ENUMERATE, into_label(&self.label));
+        write_indented_line(&doc, &self.indent, &begin_enumerate_str)?;
         doc.add_blank_line()?;
 
         for item in &self.items {
@@ -114,16 +120,18 @@ pub struct Section {
     sec_type: SectionType,
     display_num: bool,
     items: Vec<Box<dyn Item>>,
+    label: String,
     indent: usize
 }
 
 impl Section {
-    pub fn new(_name: &str, _sec_type: SectionType, _display_num: bool) -> Self {
+    pub fn new(_name: &str, _sec_type: SectionType, _display_num: bool, _label: &str) -> Self {
         Self {
             name: String::from(_name),
             sec_type: _sec_type,
             display_num: _display_num,
             items: Vec::new(),
+            label: String::from(_label),
             indent: 0
         }
     }
@@ -137,9 +145,12 @@ impl Item for Section {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         indent_line(&doc, &self.indent)?;
         match self.display_num {
-            true => writeln!(doc.get_file(), "{}{}\n", self.sec_type.get_def(), into_braces(&self.name))?,
-            false => writeln!(doc.get_file(), "{}*{}\n", self.sec_type.get_def(), into_braces(&self.name))?
+            true => write!(doc.get_file(), "{}{}", self.sec_type.get_def(), into_braces(&self.name))?,
+            false => write!(doc.get_file(), "{}*{}", self.sec_type.get_def(), into_braces(&self.name))?
         }
+
+        writeln!(doc.get_file(), " {}", into_label(&self.label))?;
+        doc.add_blank_line()?;
 
         for item in &self.items {
             item.build(doc)?;
@@ -166,15 +177,17 @@ pub struct Chapter {
     name: String,
     display_num: bool,
     items: Vec<Box<dyn Item>>,
+    label: String,
     indent: usize
 }
 
 impl Chapter {
-    pub fn new(_name: &str, _display_num: bool) -> Self {
+    pub fn new(_name: &str, _display_num: bool, _label: &str) -> Self {
         Self {
             name: String::from(_name),
             display_num: _display_num,
             items: Vec::new(),
+            label: String::from(_label),
             indent: 0
         }
     }
@@ -188,9 +201,12 @@ impl Item for Chapter {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         indent_line(&doc, &self.indent)?;
         match self.display_num {
-            true => writeln!(doc.get_file(), "{}{}\n", DEF_CHAPTER, into_braces(&self.name))?,
-            false => writeln!(doc.get_file(), "{}*{}\n", DEF_CHAPTER, into_braces(&self.name))?
+            true => write!(doc.get_file(), "{}{}", DEF_CHAPTER, into_braces(&self.name))?,
+            false => write!(doc.get_file(), "{}*{}", DEF_CHAPTER, into_braces(&self.name))?
         }
+
+        writeln!(doc.get_file(), " {}", into_label(&self.label))?;
+        doc.add_blank_line()?;
 
         for item in &self.items {
             item.build(doc)?;

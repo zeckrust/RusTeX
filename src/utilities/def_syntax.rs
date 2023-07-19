@@ -47,6 +47,9 @@ pub const DEF_NEW_PAGE: &str = r"\newpage";
 // Caption
 pub const DEF_CAPTION: &str = r"\caption";
 
+// Label
+pub const DEF_LABEL: &str = r"\label";
+
 // Positioning
 pub const DEF_CENTERING: &str = r"\centering";
 

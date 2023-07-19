@@ -20,6 +20,10 @@ pub fn into_brackets(string: &String) -> String {
     format!("{}{}", str_with_brackets, "]")
 }
 
+pub fn into_label(label_name: &String) -> String {
+    format!("{}{}", DEF_LABEL, into_braces(label_name))
+}
+
 fn into_bold(string: &String) -> String {
     format!("{}{}", DEF_BOLD, into_braces(string))
 }

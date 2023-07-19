@@ -51,12 +51,17 @@ fn main()  {
     doc.add_item(Command::new(r"\maketitle"));
     doc.add_item(Command::new(r"\tableofcontents"));
 
-    let mut chapter_1 = Chapter::new("Lorem Ipsum", true);
+    let mut chapter_1 = Chapter::new(
+        "Lorem Ipsum",
+        true,
+        "chap_1"
+    );
 
     let mut section_1: Section = Section::new(
         "Section",
         SectionType::Section,
-        true
+        true,
+        "sec_1"
     );
 
     let paragraph_1 = Text::new(
@@ -70,7 +75,8 @@ fn main()  {
     let mut sub_section_1: Section = Section::new(
         "SubSection",
         SectionType::SubSection,
-        false
+        false,
+        "subsec_1"
     );
 
     let paragraph_2 = Text::new(
@@ -85,14 +91,15 @@ fn main()  {
         true,
         "lorem_ipsum.jpg",
         "scale=0.35",
-        Some(Text::new("**Lorem** _Ipsum_"))
+        Some(Text::new("**Lorem** _Ipsum_")),
+        "fig_1"
     );
 
     let mut block_1: Block = Block::new();
     block_1.add_item(paragraph_2);
     block_1.add_item(figure_1);
 
-    let mut enumerate_1: Enumerate = Enumerate::new();
+    let mut enumerate_1: Enumerate = Enumerate::new("enum_1");
     enumerate_1.add_item(block_1);
 
     sub_section_1.add_item(enumerate_1);
@@ -104,7 +111,8 @@ fn main()  {
         "H",
         "|c|c|c|",
         true,
-        Some(Text::new("Random caption"))
+        Some(Text::new("Random caption")),
+        "tab_1"
     );
 
     table_1.add_component(HorizontalLine::new());
