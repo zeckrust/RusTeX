@@ -1,6 +1,5 @@
 use std::io::Error;
 use super::document::*;
-use super::table::TableComponent;
 use crate::utilities::format::*;
 use crate::utilities::def_syntax::*;
 
