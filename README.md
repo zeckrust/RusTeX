@@ -96,7 +96,7 @@ A full example with the resulting PDF file is accessible in the **_example_** fo
     doc.add_global_commands(commands);
     ```
 
-4. Then you can add any `Item` into any `Container`
+4. Then you can add different `Items`
     - Any `Item` can be added to a `Document`
     - Any `Item` can be added to a `Container`
     - A `Container` is an `Item`, so they can be nested
