@@ -102,22 +102,22 @@ A full example with the resulting PDF file is accessible in the **_example_** fo
     - A `Container` is an `Item`, so they can be nested
     - `Items` are built by order that they have been added
 
-    ```rust
-    let mut section_1: Section = Section::new(
-        "Section",             // Section name
-        SectionType::Section,  // Section type
-        true,                  // Display section number
-        "sec_1"                // Label
-    );
+        ```rust
+        let mut section_1: Section = Section::new(
+            "Section",             // Section name
+            SectionType::Section,  // Section type
+            true,                  // Display section number
+            "sec_1"                // Label
+        );
 
-    let paragraph_1 = Text::new(
-        "Lorem ipsum dolor sit amet, **consectetur** adipiscing elit. Integer congue nisi condimentum
-        lacus vulputate cursus. _Curabitur_ bibendum orci ac nibh vestibulum ultrices. Aenean pulvinar
-        mattis lectus, sed vehicula leo pellentesque eget. Sed sed quam sit amet nulla lacinia mollis.
-        Maecenas dignissim, augue quis suscipit pellentesque, ipsum turpis facilisis eros, eu aliquam
-        erat massa sit amet ex."
-    );
+        let paragraph_1 = Text::new(
+            "Lorem ipsum dolor sit amet, **consectetur** adipiscing elit. Integer congue nisi condimentum
+            lacus vulputate cursus. _Curabitur_ bibendum orci ac nibh vestibulum ultrices. Aenean pulvinar
+            mattis lectus, sed vehicula leo pellentesque eget. Sed sed quam sit amet nulla lacinia mollis.
+            Maecenas dignissim, augue quis suscipit pellentesque, ipsum turpis facilisis eros, eu aliquam
+            erat massa sit amet ex."
+        );
 
-    section_1.add_item(paragraph_1);
-    doc.add_item(section_1);
-    ```
+        section_1.add_item(paragraph_1);
+        doc.add_item(section_1);
+        ```
