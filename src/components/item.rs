@@ -64,6 +64,12 @@ impl Figure {
         }
     }
 
+    fn build_header(&self, doc: &Document) -> Result<(), Error> {
+        let mut begin_figure_str = format!("{}{}", DEF_BEGIN_FIGURE, into_brackets(&self.positioning));
+        begin_figure_str = format!("{} {}", begin_figure_str, into_label(&self.label));
+        write_indented_line(&doc, &self.indent, &begin_figure_str)
+    }
+
     fn build_caption(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
         match &self.caption {
             Some(caption) => {
@@ -74,7 +80,7 @@ impl Figure {
         }
     }
 
-    fn build_centering (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+    fn build_centering(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
         if self.centered {
             write_indented_line(&doc, inner_indent, DEF_CENTERING)?;
         }
@@ -82,12 +88,17 @@ impl Figure {
         Ok(())
     }
 
-    fn build_graphic (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+    fn build_graphic(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
         let include_graph_str = format!("{}{}{}", DEF_INCLUDE_GRAPH,
                                         into_brackets(&self.image_option),
                                         into_braces(&self.image_path));
 
         write_indented_line(&doc, inner_indent, &include_graph_str)
+    }
+
+    fn build_end(&self, doc: &Document) -> Result<(), Error> {
+        write_indented_line(doc, &self.indent, DEF_END_FIGURE)?;
+        doc.add_blank_line()
     }
 }
 
@@ -95,16 +106,11 @@ impl Item for Figure {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         let inner_indent: &usize = &(self.indent + 1);
 
-        let mut begin_figure_str = format!("{}{}", DEF_BEGIN_FIGURE, into_brackets(&self.positioning));
-        begin_figure_str = format!("{} {}", begin_figure_str, into_label(&self.label));
-        write_indented_line(&doc, &self.indent, &begin_figure_str)?;
-
-        self.build_centering(&doc, inner_indent)?;
-        self.build_graphic(&doc, inner_indent)?;
-        self.build_caption(&doc, inner_indent)?;
-
-        write_indented_line(&doc, &self.indent, DEF_END_FIGURE)?;
-        doc.add_blank_line()
+        self.build_header(doc)?;
+        self.build_centering(doc, inner_indent)?;
+        self.build_graphic(doc, inner_indent)?;
+        self.build_caption(doc, inner_indent)?;
+        self.build_end(doc)
     }
 
     fn update_indent(&mut self, super_indent: &usize) {

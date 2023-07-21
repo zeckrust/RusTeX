@@ -69,10 +69,17 @@ impl Document {
     }
 
     fn build_default_packages(&mut self) -> Result<(), Error> {
-        writeln!(&self.file, "{}", DEFAULT_PACKAGES_COMMENT)?;
-        writeln!(&self.file, "{}", DEFAULT_FLOAT_PACKAGE)?;
-        writeln!(&self.file, "{}", DEFAULT_GRAPHICX_PACKAGE)?;
-        writeln!(&self.file, "{}", DEFAULT_XCOLOR_PACKAGE)?;
+        let default_packages = vec![
+            DEFAULT_PACKAGES_COMMENT,
+            DEFAULT_FLOAT_PACKAGE,
+            DEFAULT_GRAPHICX_PACKAGE,
+            DEFAULT_XCOLOR_PACKAGE
+        ];
+
+        for package in default_packages {
+            writeln!(&self.file, "{}", package)?;
+        }
+
         self.add_blank_line()
     }
 

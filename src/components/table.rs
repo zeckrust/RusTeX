@@ -33,6 +33,12 @@ impl Table {
         self.components.push(Box::new(component));
     }
 
+    fn build_header(&self, doc: &Document) -> Result<(), Error> {
+        let mut begin_table_str = format!("{}{}", DEF_BEGIN_TABLE, into_brackets(&self.positioning));
+        begin_table_str = format!("{} {}", begin_table_str, into_label(&self.label));
+        write_indented_line(&doc, &self.indent, &begin_table_str)
+    }
+
     fn build_tabular(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
         let begin_tabular_str = format!("{}{}", DEF_BEGIN_TABULAR, into_braces(&self.options));
         write_indented_line(&doc, inner_indent, &begin_tabular_str)?;
@@ -56,12 +62,17 @@ impl Table {
         Ok(())
     }
 
-    fn build_centering (&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
+    fn build_centering(&self, doc: &Document, inner_indent: &usize) -> Result<(), Error> {
         if self.centered {
             write_indented_line(&doc, inner_indent,DEF_CENTERING )?;
         }
 
         Ok(())
+    }
+
+    fn build_end(&self, doc: &Document) -> Result<(), Error> {
+        write_indented_line(&doc, &self.indent, DEF_END_TABLE)?;
+        doc.add_blank_line()
     }
 }
 
@@ -69,16 +80,11 @@ impl Item for Table {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         let inner_indent = &(self.indent + 1);
 
-        let mut begin_table_str = format!("{}{}", DEF_BEGIN_TABLE, into_brackets(&self.positioning));
-        begin_table_str = format!("{} {}", begin_table_str, into_label(&self.label));
-        write_indented_line(&doc, &self.indent, &begin_table_str)?;
-
-        self.build_centering(&doc, inner_indent)?;
-        self.build_tabular(&doc, inner_indent)?;
-        self.build_caption(&doc, inner_indent)?;
-
-        write_indented_line(&doc, &self.indent, DEF_END_TABLE)?;
-        doc.add_blank_line()
+        self.build_header(doc)?;
+        self.build_centering(doc, inner_indent)?;
+        self.build_tabular(doc, inner_indent)?;
+        self.build_caption(doc, inner_indent)?;
+        self.build_end(doc)
     }
 
     fn update_indent(&mut self, super_indent: &usize) {
@@ -138,6 +144,7 @@ impl TableRow {
 impl Item for TableRow {
     fn build(&self, doc: &Document) -> Result<(), Error> {
         let mut cells: Vec<String> = Vec::new();
+
         for cell in &self.content {
             cells.push(cell.get_string())
         }

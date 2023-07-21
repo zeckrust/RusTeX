@@ -26,21 +26,33 @@ impl Enumerate {
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
-}
 
-impl Item for Enumerate {
-    fn build(&self, doc: &Document) -> Result<(), Error> {
+    fn build_header(&self, doc: &Document) -> Result<(), Error> {
         let begin_enumerate_str = format!("{} {}", DEF_BEGIN_ENUMERATE, into_label(&self.label));
         write_indented_line(&doc, &self.indent, &begin_enumerate_str)?;
-        doc.add_blank_line()?;
+        doc.add_blank_line()
+    }
 
+    fn build_items(&self, doc: &Document) -> Result<(), Error> {
         for item in &self.items {
             write_indented_line(&doc, &(self.indent + 1), DEF_ITEM_ENUMERATE)?;
             item.build(doc)?;
         }
 
+        Ok(())
+    }
+
+    fn build_end(&self, doc: &Document) -> Result<(), Error> {
         write_indented_line(&doc, &self.indent, DEF_END_ENUMERATE)?;
         doc.add_blank_line()
+    }
+}
+
+impl Item for Enumerate {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        self.build_header(doc)?;
+        self.build_items(doc)?;
+        self.build_end(doc)
     }
 
     fn update_indent(&mut self, super_indent: &usize) {
@@ -139,24 +151,33 @@ impl Section {
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
-}
 
-impl Item for Section {
-    fn build(&self, doc: &Document) -> Result<(), Error> {
+    fn build_header(&self, doc: &Document) -> Result<(), Error> {
         indent_line(&doc, &self.indent)?;
+
         match self.display_num {
             true => write!(doc.get_file(), "{}{}", self.sec_type.get_def(), into_braces(&self.name))?,
             false => write!(doc.get_file(), "{}*{}", self.sec_type.get_def(), into_braces(&self.name))?
         }
 
         writeln!(doc.get_file(), " {}", into_label(&self.label))?;
-        doc.add_blank_line()?;
+        doc.add_blank_line()
+    }
 
+    fn build_items(&self, doc: &Document) -> Result<(), Error> {
         for item in &self.items {
             item.build(doc)?;
         }
 
         Ok(())
+    }
+
+}
+
+impl Item for Section {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        self.build_header(doc)?;
+        self.build_items(doc)
     }
 
     fn update_indent(&mut self, super_indent: &usize) {
@@ -195,24 +216,32 @@ impl Chapter {
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
-}
 
-impl Item for Chapter {
-    fn build(&self, doc: &Document) -> Result<(), Error> {
+    fn build_header(&self, doc: &Document) -> Result<(), Error> {
         indent_line(&doc, &self.indent)?;
+
         match self.display_num {
             true => write!(doc.get_file(), "{}{}", DEF_CHAPTER, into_braces(&self.name))?,
             false => write!(doc.get_file(), "{}*{}", DEF_CHAPTER, into_braces(&self.name))?
         }
 
         writeln!(doc.get_file(), " {}", into_label(&self.label))?;
-        doc.add_blank_line()?;
+        doc.add_blank_line()
+    }
 
+    fn build_items(&self, doc: &Document) -> Result<(), Error> {
         for item in &self.items {
             item.build(doc)?;
         }
 
         Ok(())
+    }
+}
+
+impl Item for Chapter {
+    fn build(&self, doc: &Document) -> Result<(), Error> {
+        self.build_header(doc)?;
+        self.build_items(doc)
     }
 
     fn update_indent(&mut self, super_indent: &usize) {

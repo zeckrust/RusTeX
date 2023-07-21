@@ -32,14 +32,14 @@ The documentation is accessible [here]().
 - Table
 - Figure
 - Text
-- PageBreak
 - Label
+- PageBreak
 
 ### _Formatting_
 
-- Markdown bold
-- Markdown italic
-- Color
+- Markdown **bold**
+- Markdown _italic_
+- Color text
 
 ## Example
 
