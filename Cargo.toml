@@ -2,8 +2,13 @@
 name = "rustex"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Gabriel Bergeron"]
+description = "A library to make simple auto-generated LaTeX files in Rust."
+keywords = ["latex", "generate", "reports"]
+license = "MIT"
+repository = "https://github.com/zeckrust/RusTeX"
+homepage = "https://github.com/zeckrust/RusTeX"
+readme = "README.md"
 
 [dependencies]
 regex = "1"

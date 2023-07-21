@@ -1,5 +1,4 @@
 mod components;
-#[doc(hidden)]
 mod utilities;
 
 use components::document::*;
