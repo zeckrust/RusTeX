@@ -97,6 +97,10 @@ A full example with the resulting PDF file is accessible in the **_example_** fo
     ```
 
 4. Then you can add any `Item` into any `Container`
+    - Any `Item` can be added to a `Document`
+    - Any `Item` can be added to a `Container`
+    - A `Container` is an `Item`, so they can be nested
+    - `Items` are built by order that they have been added
 
     ```rust
     let mut section_1: Section = Section::new(
