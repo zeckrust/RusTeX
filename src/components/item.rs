@@ -4,17 +4,47 @@ use crate::utilities::format::*;
 use crate::utilities::def_syntax::*;
 
 
+/// A component that can be added to a `Document` or a `Container`
 pub trait Item {
     fn build(&self, doc: &Document) -> Result<(), Error>;
     fn update_indent(&mut self, super_indent: &usize);
 }
 
+/// An `Item` that wraps strings.
+/// Can be used as paragraphs, as captions, etc.
+/// Supports Markdown **bold** formatting (\*\*bold\*\*)
+/// Supports Markdown _italic_ formatting (\_bold\_)
+/// Supports Color text formatting (#blue{text})
+///
+/// Here are all the default colors:
+/// - red
+/// - green
+/// - blue
+/// - cyan
+/// - magenta
+/// - yellow
+/// - black
+/// - gray
+/// - white
+/// - darkgray
+/// - lightgray
+/// - brown
+/// - lime
+/// - olive
+/// - orange
+/// - pink
+/// - purple
+/// - teal
+/// - violet
+///
+/// Other colors can be used by adding `Packages` or defining custom colors.
 pub struct Text {
     text: String,
     indent: usize
 }
 
 impl Text {
+    /// Initializes a new `Text` object
     pub fn new(_text: &str) -> Self {
         Self {
             text: format_text(String::from(_text)),
@@ -22,6 +52,7 @@ impl Text {
         }
     }
 
+    /// Gets a clone of the `Text`'s string.
     pub fn get_string(&self) -> String {
         self.text.clone()
     }
@@ -40,6 +71,8 @@ impl Item for Text {
     }
 }
 
+/// An object that can display images, graphics, etc.
+/// Refer to `figure` in LaTeX documentation for more information
 pub struct Figure {
     positioning: String,
     centered: bool,
@@ -51,6 +84,7 @@ pub struct Figure {
 }
 
 impl Figure {
+    /// Initializes a new `Figure` object
     pub fn new(_positioning: &str, _centered: bool, _image_path: &str,
                _image_option: &str, _caption: Option<Text>, _label: &str) -> Self {
         Self {
@@ -118,12 +152,14 @@ impl Item for Figure {
     }
 }
 
+/// An object to add any LaTeX commands to an `Item` or a `Document`.
 pub struct Command {
     command: String,
     indent: usize
 }
 
 impl Command {
+    /// Initializes a new `Command` object
     pub fn new(_command: &str) -> Self {
         Self {
             command: String::from(_command),
@@ -142,11 +178,13 @@ impl Item for Command {
     }
 }
 
+/// An object to add a page jump to a `Document`.
 pub struct PageBreak {
     indent: usize
 }
 
 impl PageBreak {
+    /// Initializes a new `PageBreak` object
     pub fn new() -> Self {
         Self {
             indent: 0

@@ -37,9 +37,9 @@ The documentation is accessible [here]().
 
 ### _Formatting_
 
-- Markdown **bold**
-- Markdown _italic_
-- Color text
+- Markdown **bold** (\*\*bold\*\*)
+- Markdown _italic_ (\_italic\_)
+- Color text (#blue{text})
 
 ## Example
 
@@ -100,7 +100,7 @@ A full example with the resulting PDF file is accessible in the **_example_** fo
     - Any `Item` can be added to a `Document`
     - Any `Item` can be added to a `Container`
     - A `Container` is an `Item`, so they can be nested
-    - `Items` are built by order that they have been added
+    - `Items` are displayed by order that they have been added
 
         ```rust
         let mut section_1: Section = Section::new(

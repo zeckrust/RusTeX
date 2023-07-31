@@ -4,10 +4,14 @@ use super::document::*;
 use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
+/// An object that can contain `Items`.
+/// A `Container` is an `Item`, so it can be nested.
 pub trait Container: Item {
     fn update_nested_indent(&mut self);
 }
 
+/// An object that can list `Items`
+/// Refer to `enumerate` in LaTeX documentation for more information
 pub struct Enumerate {
     items: Vec<Box<dyn Item>>,
     label: String,
@@ -15,6 +19,7 @@ pub struct Enumerate {
 }
 
 impl Enumerate {
+    /// Initializes a new `Enumerate` object
     pub fn new(_label: &str) -> Self {
         Self {
             items: Vec::new(),
@@ -23,6 +28,7 @@ impl Enumerate {
         }
     }
 
+    /// Adds an `Item` to this `Container`
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
@@ -69,12 +75,17 @@ impl Container for Enumerate {
     }
 }
 
+/// A transparent object that contains `Items`
+/// A `Block` object is not displayed. Its only purpose is to group other `Items`.
+/// Example: A `Block` can be composed of a `Text` and a `Figure` and be added to an `Enumerate`.
+/// This way, the text and the figure will be placed under the same `\item` in the enumerate.
 pub struct Block {
     items: Vec<Box<dyn Item>>,
     indent: usize
 }
 
 impl Block {
+    /// Initializes a new `Block` object
     pub fn new() -> Self {
         Self {
             items: Vec::new(),
@@ -82,6 +93,7 @@ impl Block {
         }
     }
 
+    /// Adds an `Item` to this `Container`
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
@@ -111,6 +123,7 @@ impl Container for Block {
     }
 }
 
+/// Can be passed to a `Section` component to define its type.
 pub enum SectionType {
     Section,
     SubSection,
@@ -127,6 +140,8 @@ impl SectionType {
     }
 }
 
+/// A `Container` object that contains `Items` and displays them in a _section_
+/// Refer to `section` in LaTeX documentation for more information
 pub struct Section {
     name: String,
     sec_type: SectionType,
@@ -137,6 +152,7 @@ pub struct Section {
 }
 
 impl Section {
+    /// Initializes a new `Section` object
     pub fn new(_name: &str, _sec_type: SectionType, _display_num: bool, _label: &str) -> Self {
         Self {
             name: String::from(_name),
@@ -148,6 +164,7 @@ impl Section {
         }
     }
 
+    /// Adds an `Item` to this `Container`
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
@@ -194,6 +211,8 @@ impl Container for Section {
     }
 }
 
+/// A `Container` object that contains `Items` and displays them in a _chapter_
+/// Refer to `chapter` in LaTeX documentation for more information
 pub struct Chapter {
     name: String,
     display_num: bool,
@@ -203,6 +222,7 @@ pub struct Chapter {
 }
 
 impl Chapter {
+    /// Initializes a new `Chapter` object
     pub fn new(_name: &str, _display_num: bool, _label: &str) -> Self {
         Self {
             name: String::from(_name),
@@ -213,6 +233,7 @@ impl Chapter {
         }
     }
 
+    /// Adds an `Item` to this `Container`
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }

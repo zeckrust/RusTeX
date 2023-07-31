@@ -5,6 +5,10 @@ use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
 
+/// The base of the generated LaTeX file.
+/// `Containers` and `Items` can be added to the `Document` object.
+/// `Packages` and global `Commands` are located before the `\begin{document}` line.
+/// Other `Items` are located between the `\begin{document}` and `\end{document}` lines.
 pub struct Document {
     file: File,
     class: DocumentClass,
@@ -14,6 +18,8 @@ pub struct Document {
 }
 
 impl Document {
+    /// Initializes a new `Document` object.
+    /// A `File` and a `DocumentClass` need to be passed for the creation of the `Document`.
     pub fn new(doc_file: File, doc_class: DocumentClass) -> Self {
         Self {
             file: doc_file,
@@ -24,22 +30,23 @@ impl Document {
         }
     }
 
-    pub fn get_file(&self) -> &File {
-        &self.file
-    }
-
+    /// Adds an `Item` to the `Document`.
     pub fn add_item<I: Item + 'static>(&mut self, item: I) {
         self.items.push(Box::new(item));
     }
 
+    /// Adds a list of `Packages` to the `Document`.
     pub fn add_packages(&mut self, _packages: Vec<Package>) {
         self.packages.extend(_packages);
     }
 
+    /// Adds a list of global `Commands` to the `Document`.
+    /// These commands are located before the `\begin{document}` line.
     pub fn add_global_commands(&mut self, _commands: Vec<Command>) {
         self.commands.extend(_commands);
     }
 
+    /// Builds and generates the LaTeX file.
     pub fn build(&mut self) {
         self.update_indents();
         self.build_doc_class().unwrap();
@@ -112,14 +119,21 @@ impl Document {
     pub fn add_blank_line(&self) -> Result<(), Error> {
         writeln!(&self.file, "")
     }
+
+    #[doc(hidden)]
+    pub fn get_file(&self) -> &File {
+        &self.file
+    }
 }
 
+/// Defines the class of the `Document`.
 pub struct DocumentClass {
     _type: ClassType,
     options: Vec<String>
 }
 
 impl DocumentClass {
+    /// Initializes a new `DocumentClass` object.
     pub fn new(class_type: ClassType, _options: Vec<&str>) -> Self {
         Self {
             _type: class_type,
@@ -131,6 +145,7 @@ impl DocumentClass {
     }
 }
 
+/// Defines the type of a `DocumentClass` object.
 pub enum ClassType {
     Article,
     Report,
@@ -153,12 +168,14 @@ impl ClassType {
     }
 }
 
+/// An object to import modules to your LaTeX file.
 pub struct Package {
     name: String,
     options: Vec<String>
 }
 
 impl Package {
+    /// Initializes a new `Package` object
     pub fn new(_name: &str, _options: Vec<&str>) -> Self {
         Self {
             name: String::from(_name),
@@ -169,6 +186,7 @@ impl Package {
         }
     }
 
+    #[doc(hidden)]
     pub fn build(&self, doc: &Document) -> Result<(), Error> {
         let options_str = self.options.join(", ");
         let mut package_str: String = format!("{}{}", DEF_PACKAGE, into_brackets(&options_str));

@@ -5,6 +5,9 @@ use super::container::Container;
 use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
+
+/// An object that can contain different `Items` in rows and columns
+/// Refer to `table` in LaTeX documentation for more information
 pub struct Table {
     positioning: String,
     options: String,
@@ -16,6 +19,7 @@ pub struct Table {
 }
 
 impl Table {
+    /// Initializes a new `Table` object
     pub fn new(_positioning: &str, _options: &str, _centered: bool,
                _caption: Option<Text>, _label: &str) -> Self {
         Self {
