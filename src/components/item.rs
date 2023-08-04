@@ -72,7 +72,7 @@ impl Item for Text {
 }
 
 /// An object that can display images, graphics, etc.
-/// Refer to `figure` in LaTeX documentation for more information
+/// Refer to `figure` in LaTeX documentation for more information.
 pub struct Figure {
     positioning: String,
     centered: bool,

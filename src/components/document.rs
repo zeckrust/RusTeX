@@ -168,7 +168,7 @@ impl ClassType {
     }
 }
 
-/// An object to import modules to your LaTeX file.
+/// An object to import libraries to your LaTeX file.
 pub struct Package {
     name: String,
     options: Vec<String>

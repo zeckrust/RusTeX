@@ -38,7 +38,7 @@
 //!
 //! ## Example
 //!
-//! A full example with the resulting PDF file is accessible in the **_example_** folder.
+//! A full example with the resulting PDF file is accessible in the **_example_** folder of the repository.
 //!
 //! 1. Start by creating a base `Document`
 //!

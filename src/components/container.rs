@@ -10,8 +10,8 @@ pub trait Container: Item {
     fn update_nested_indent(&mut self);
 }
 
-/// An object that can list `Items`
-/// Refer to `enumerate` in LaTeX documentation for more information
+/// An object that can list `Items`.
+/// Refer to `enumerate` in LaTeX documentation for more information.
 pub struct Enumerate {
     items: Vec<Box<dyn Item>>,
     label: String,
@@ -140,8 +140,8 @@ impl SectionType {
     }
 }
 
-/// A `Container` object that contains `Items` and displays them in a _section_
-/// Refer to `section` in LaTeX documentation for more information
+/// A `Container` object that contains `Items` and displays them in a _section_.
+/// Refer to `section` in LaTeX documentation for more information.
 pub struct Section {
     name: String,
     sec_type: SectionType,
@@ -211,8 +211,8 @@ impl Container for Section {
     }
 }
 
-/// A `Container` object that contains `Items` and displays them in a _chapter_
-/// Refer to `chapter` in LaTeX documentation for more information
+/// A `Container` object that contains `Items` and displays them in a _chapter_.
+/// Refer to `chapter` in LaTeX documentation for more information.
 pub struct Chapter {
     name: String,
     display_num: bool,

@@ -6,8 +6,63 @@ use crate::utilities::def_syntax::*;
 use crate::utilities::format::*;
 
 
-/// An object that can contain different `Items` in rows and columns
-/// Refer to `table` in LaTeX documentation for more information
+/// An object that can contain different `TableComponents` in rows and columns.
+/// Refer to `table` in LaTeX documentation for more information.
+///
+/// Example:
+///
+/// ```rust
+/// let mut table_1: Table = Table::new(
+///     "H",                                // Positioning
+///     "|c|c|c|",                          // Options
+///     true,                               // Centered
+///     Some(Text::new("Random caption")),  // Caption
+///     "tab_1"                             // Label
+/// );
+///
+/// table_1.add_component(HorizontalLine::new());
+
+/// let table_row_1 = TableRow::new(vec![Text::new(r"\multicolumn{3}{|c|}{**Lorem Ipsum**}")]);
+///
+/// table_1.add_component(table_row_1);
+/// table_1.add_component(HorizontalLine::new());
+///
+/// let table_row_2 = TableRow::new(vec![
+///     Text::new("#red{First}"),
+///     Text::new("#violet{Second}"),
+///     Text::new("#teal{Third}")]
+/// );
+///
+/// table_1.add_component(table_row_2);
+/// table_1.add_component(HorizontalLine::new());
+///
+/// let table_row_3 = TableRow::new(vec![
+///     Text::new("Test 1"),
+///     Text::new("Test 2"),
+///     Text::new("Test 3")]
+/// );
+
+/// table_1.add_component(table_row_3);
+/// table_1.add_component(HorizontalLine::new());
+/// ```
+///
+/// Generated LaTeX:
+///
+/// ```tex
+/// \begin{table}[H] \label{tab_1}
+///     \centering
+///     \begin{tabular}{|c|c|c|}
+///         \hline
+///         \multicolumn{3}{|c|}{\textbf{Lorem Ipsum}} \\
+///         \hline
+///         {\color{red}{First}} & {\color{violet}{Second}} & {\color{teal}{Third}} \\
+///         \hline
+///         Test 1 & Test 2 & Test 3 \\
+///         \hline
+///     \end{tabular}
+///     \caption{Random caption}
+/// \end{table}
+/// ```
 pub struct Table {
     positioning: String,
     options: String,
@@ -33,6 +88,7 @@ impl Table {
         }
     }
 
+    /// Add a `TableComponent` to the `Table`
     pub fn add_component<TC: TableComponent + 'static>(&mut self, component: TC) {
         self.components.push(Box::new(component));
     }
@@ -105,13 +161,16 @@ impl Container for Table {
     }
 }
 
+/// A component that can be added to a `Table`
 pub trait TableComponent: Item {}
 
+/// A horizontal line that can be added to a `Table`
 pub struct HorizontalLine {
     indent: usize
 }
 
 impl HorizontalLine {
+    /// Initializes a new `HorizontalLine` object
     pub fn new() -> Self {
         Self{
             indent: 0
@@ -131,12 +190,14 @@ impl Item for HorizontalLine {
 
 impl TableComponent for HorizontalLine {}
 
+/// A row that can be added to a `Table`
 pub struct TableRow {
     content: Vec<Text>,
     indent: usize
 }
 
 impl TableRow {
+    /// Initializes a new `TableRow` object
     pub fn new(_content: Vec<Text>) -> Self {
         Self {
             content: _content,
