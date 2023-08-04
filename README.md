@@ -18,7 +18,7 @@ rustex = "0.1.0"
 
 ## Documentation
 
-The documentation is accessible [here]().
+The documentation is accessible [here](https://docs.rs/rustex/0.1.0/rustex/).
 
 ## Implemented Features
 
