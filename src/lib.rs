@@ -42,8 +42,10 @@
 //!
 //! 1. Start by creating a base `Document`
 //!
-//! ```rust
-//! const DOCUMENT_NAME: &str = "generated_tex/main.tex";
+//! ```
+//! # use rustex::*;
+//! # use std::fs::File;
+//! const DOCUMENT_NAME: &str = "main.tex";
 //! const DOCUMENT_CLASS: ClassType = ClassType::Report;
 //! const FONT_SIZE: &str = "12pt";
 //!
@@ -59,7 +61,18 @@
 //!
 //! 2. Add some `Packages`
 //!
-//! ```rust
+//! ```
+//! # const DOCUMENT_NAME: &str = "main.tex";
+//! # const DOCUMENT_CLASS: ClassType = ClassType::Report;
+//! # const FONT_SIZE: &str = "12pt";
+//! # let doc_file: File = File::create(DOCUMENT_NAME).unwrap();
+//! # let doc_class: DocumentClass = DocumentClass::new(
+//! #     DOCUMENT_CLASS,
+//! #     vec![FONT_SIZE]
+//! # );
+//! # let mut doc: Document = Document::new(doc_file, doc_class);
+//! # use rustex::*;
+//! # use std::fs::File;
 //! let packages = vec![
 //!     Package::new(
 //!         "babel",
@@ -80,7 +93,18 @@
 //!
 //! 3. Add some global `Commands`
 //!
-//! ```rust
+//! ```
+//! # const DOCUMENT_NAME: &str = "main.tex";
+//! # const DOCUMENT_CLASS: ClassType = ClassType::Report;
+//! # const FONT_SIZE: &str = "12pt";
+//! # let doc_file: File = File::create(DOCUMENT_NAME).unwrap();
+//! # let doc_class: DocumentClass = DocumentClass::new(
+//! #     DOCUMENT_CLASS,
+//! #     vec![FONT_SIZE]
+//! # );
+//! # let mut doc: Document = Document::new(doc_file, doc_class);
+//! # use rustex::*;
+//! # use std::fs::File;
 //! let commands = vec![
 //!     Command::new(r"\title{Title}"),
 //!     Command::new(r"\author{Author}"),
@@ -97,7 +121,18 @@
 //!     - A `Container` is an `Item`, so they can be nested
 //!     - `Items` are displayed by order that they have been added
 //!
-//!     ```rust
+//!     ```
+//!     # const DOCUMENT_NAME: &str = "main.tex";
+//!     # const DOCUMENT_CLASS: ClassType = ClassType::Report;
+//!     # const FONT_SIZE: &str = "12pt";
+//!     # let doc_file: File = File::create(DOCUMENT_NAME).unwrap();
+//!     # let doc_class: DocumentClass = DocumentClass::new(
+//!     #     DOCUMENT_CLASS,
+//!     #     vec![FONT_SIZE]
+//!     # );
+//!     # let mut doc: Document = Document::new(doc_file, doc_class);
+//!     # use rustex::*;
+//!     # use std::fs::File;
 //!     let mut section_1: Section = Section::new(
 //!         "Section",             // Section name
 //!         SectionType::Section,  // Section type

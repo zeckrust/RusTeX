@@ -12,6 +12,7 @@ use crate::utilities::format::*;
 /// Example:
 ///
 /// ```rust
+/// # use rustex::*;
 /// let mut table_1: Table = Table::new(
 ///     "H",                                // Positioning
 ///     "|c|c|c|",                          // Options
